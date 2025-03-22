@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": "b06e",
+      "username": "Lahl",
+      "email": "somekaart@gmail.com",
+      "password": "546789123"
+    },
+    {
+      "id": "782e",
+      "username": "Lahl",
+      "email": "eefefef@gmail.com",
+      "password": "546789123"
+    },
+    {
+      "id": "eac2",
+      "username": "Lahl",
+      "email": "eehfttffefef@gmail.com",
+      "password": "546789123"
+    },
+    {
+      "id": "7c49",
+      "username": "sdfdskfdskff",
+      "email": "eefesfsffef@gmail.com",
+      "password": "546789123"
+    }
+  ]
+}
