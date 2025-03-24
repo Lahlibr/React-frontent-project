@@ -23,6 +23,294 @@
       "username": "sdfdskfdskff",
       "email": "eefesfsffef@gmail.com",
       "password": "546789123"
+    },
+    {
+      "id": "8da8",
+      "username": "sjkfjdsklfdksl",
+      "email": "fanac@fan",
+      "password": "123456789"
+    }
+  ],
+  "categories": [
+    {
+      "name": "Burgers",
+      "img": "images/burger-14.jpg",
+      "products": [
+        {
+          "id": 1,
+          "name": "Classic Cheeseburger",
+          "old_price": 220,
+          "new_price": 199,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "A juicy beef patty with melted cheddar cheese, fresh lettuce, tomato, and onions in a soft burger bun.",
+          "img": "images/burger-12.jpg"
+        },
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg"
+        },
+        {
+          "id": 3,
+          "name": "Peri Peri Chicken Burger",
+          "old_price": 295,
+          "new_price": 259,
+          "offer": "12% Off",
+          "type": "Non-Veg",
+          "rating": 4.6,
+          "description": "Fiery peri peri chicken fillet with spicy mayo, lettuce, and onions in a toasted bun.",
+          "img": "images/burger-15.jpg"
+        },
+        {
+          "id": 4,
+          "name": "BBQ Bacon Burger",
+          "old_price": 340,
+          "new_price": 279,
+          "offer": "18% Off",
+          "type": "Non-Veg",
+          "rating": 4.7,
+          "description": "Smoky bacon, BBQ sauce, crispy onions, and melted cheese on a juicy beef patty.",
+          "img": "images/burger-16.jpg"
+        },
+        {
+          "id": 5,
+          "name": "Crispy Veggie Burger",
+          "old_price": 175,
+          "new_price": 159,
+          "offer": "8% Off",
+          "type": "Veg",
+          "rating": 4.2,
+          "description": "Crispy vegetable patty with lettuce, tomato, and tangy mayo in a soft sesame bun.",
+          "img": "images/burger-17.jpg"
+        },
+        {
+          "id": 6,
+          "name": "Spicy Mexican Burger",
+          "old_price": 265,
+          "new_price": 229,
+          "offer": "14% Off",
+          "type": "Non-Veg",
+          "rating": 4.6,
+          "description": "Spiced beef patty with jalapeños, nacho chips, spicy salsa, and cheddar cheese.",
+          "img": "images/burger-18.jpg"
+        },
+        {
+          "id": 7,
+          "name": "Mushroom Swiss Burger",
+          "old_price": 275,
+          "new_price": 249,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "Juicy beef patty with sautéed mushrooms and melted Swiss cheese in a toasted bun.",
+          "img": "images/burgers19.jpg"
+        },
+        {
+          "id": 8,
+          "name": "Aloo Tikki Burger",
+          "old_price": 186,
+          "new_price": 149,
+          "offer": "20% Off",
+          "type": "Veg",
+            "rating": 4.3,
+          "description": "Classic Indian-style aloo tikki with tangy tamarind chutney and fresh veggies.",
+          "img": "images/burger20.jpg"
+        }
+      ],
+      "id": "561e"
+    },
+    {
+      "name": "Pizza",
+      "img": "images/OIP.jpeg",
+      "products": [
+        {
+          "id": 4,
+          "name": "Margherita Pizza",
+          "price": 299,
+          "type": "Veg",
+          "fresh": true,
+          "rating": 4.7,
+          "description": "Classic Margherita pizza with fresh basil, mozzarella cheese, and a tangy tomato sauce base.",
+          "img": "images/margherita-pizza.jpg"
+        },
+        {
+          "id": 5,
+          "name": "Pepperoni Pizza",
+          "price": 349,
+          "type": "Non-Veg",
+          "fresh": true,
+          "rating": 4.8,
+          "description": "Spicy pepperoni slices layered over gooey mozzarella and a crispy crust.",
+          "img": "images/pepperoni-pizza.jpg"
+        },
+        {
+          "id": 6,
+          "name": "BBQ Chicken Pizza",
+          "price": 369,
+          "type": "Non-Veg",
+          "fresh": true,
+          "rating": 4.6,
+          "description": "BBQ chicken with onions, jalapeños, and a smoky BBQ sauce drizzle on a crispy thin crust.",
+          "img": "images/bbq-chicken-pizza.jpg"
+        }
+      ],
+      "id": "8f7c"
+    },
+    {
+      "name": "Desserts",
+      "img": "images/OIP1.jpeg",
+      "products": [
+        {
+          "id": 7,
+          "name": "Chocolate Brownie",
+          "price": 149,
+          "type": "Veg",
+          "fresh": true,
+          "rating": 4.7,
+          "description": "Rich and fudgy chocolate brownie served warm with a scoop of vanilla ice cream.",
+          "img": "images/chocolate-brownie.jpg"
+        },
+        {
+          "id": 8,
+          "name": "Strawberry Cheesecake",
+          "price": 249,
+          "type": "Veg",
+          "fresh": true,
+          "rating": 4.8,
+          "description": "Creamy cheesecake topped with fresh strawberry sauce and whipped cream.",
+          "img": "images/strawberry-cheesecake.jpg"
+        },
+        {
+          "id": 9,
+          "name": "Tiramisu",
+          "price": 269,
+          "type": "Veg",
+          "fresh": true,
+          "rating": 4.9,
+          "description": "Italian coffee-flavored dessert with layers of mascarpone and cocoa powder.",
+          "img": "images/tiramisu.jpg"
+        }
+      ],
+      "id": "9f31"
+    },
+    {
+      "name": "Pasta",
+      "img": "images/Pasta.jpeg",
+      "products": [
+        {
+          "id": 10,
+          "name": "Alfredo Pasta",
+          "price": 299,
+          "type": "Veg",
+          "fresh": true,
+          "rating": 4.5,
+          "description": "Creamy Alfredo sauce with fettuccine pasta and parmesan cheese.",
+          "img": "images/alfredo-pasta.jpg"
+        },
+        {
+          "id": 11,
+          "name": "Penne Arrabbiata",
+          "price": 249,
+          "type": "Veg",
+          "fresh": true,
+          "rating": 4.4,
+          "description": "Spicy red sauce pasta with garlic, chili flakes, and fresh basil.",
+          "img": "images/penne-arrabbiata.jpg"
+        },
+        {
+          "id": 12,
+          "name": "Chicken Pesto Pasta",
+          "price": 329,
+          "type": "Non-Veg",
+          "fresh": true,
+          "rating": 4.6,
+          "description": "Grilled chicken tossed in basil pesto sauce with linguine pasta.",
+          "img": "images/chicken-pesto-pasta.jpg"
+        }
+      ],
+      "id": "ead0"
+    },
+    {
+      "name": "Drinks",
+      "img": "images/drinks.jpeg",
+      "products": [
+        {
+          "id": 13,
+          "name": "Mango Smoothie",
+          "price": 179,
+          "type": "Veg",
+          "fresh": true,
+          "rating": 4.5,
+          "description": "Refreshing mango smoothie made with fresh mango pulp and yogurt.",
+          "img": "images/mango-smoothie.jpg"
+        },
+        {
+          "id": 14,
+          "name": "Lemon Iced Tea",
+          "price": 129,
+          "type": "Veg",
+          "fresh": true,
+          "rating": 4.3,
+          "description": "Chilled lemon-infused iced tea with a hint of mint.",
+          "img": "images/lemon-iced-tea.jpg"
+        },
+        {
+          "id": 15,
+          "name": "Cold Coffee",
+          "price": 199,
+          "type": "Veg",
+          "fresh": true,
+          "rating": 4.7,
+          "description": "Iced coffee blended with milk, sugar, and topped with chocolate syrup.",
+          "img": "images/cold-coffee.jpg"
+        }
+      ],
+      "id": "9f78"
+    },
+    {
+      "name": "Seafood",
+      "img": "images/seafood.jpeg",
+      "products": [
+        {
+          "id": 16,
+          "name": "Grilled Salmon",
+          "price": 499,
+          "type": "Non-Veg",
+          "fresh": true,
+          "rating": 4.8,
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "img": "images/grilled-salmon.jpg"
+        },
+        {
+          "id": 17,
+          "name": "Prawn Tempura",
+          "price": 399,
+          "type": "Non-Veg",
+          "fresh": true,
+          "rating": 4.7,
+          "description": "Crispy battered prawns served with a sweet chili dipping sauce.",
+          "img": "images/prawn-tempura.jpg"
+        },
+        {
+          "id": 18,
+          "name": "Lobster Thermidor",
+          "price": 699,
+          "type": "Non-Veg",
+          "fresh": true,
+          "rating": 4.9,
+          "description": "Lobster baked in a creamy cheese sauce with herbs and white wine.",
+          "img": "images/lobster-thermidor.jpg"
+        }
+      ],
+      "id": "ea9d"
     }
   ]
 }

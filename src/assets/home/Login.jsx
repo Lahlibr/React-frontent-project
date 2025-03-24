@@ -9,23 +9,30 @@ const Login = () => {
     email:Yup.string().email("Invalid Email").required("Email is required"),
     password:Yup.string().required("Password is required")
   });
-  const handleSubmit = async (values,{setSubmitting})=>{
-    try{
-      const response = await axios.get("http://localhost:5000/users")
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.get("http://localhost:5000/users");
       const users = response.data;
       const user = users.find(
         (user) => user.email === values.email && user.password === values.password
       );
-      if(user){
-        console.log("Login successfull",user);
-        navigate("/");
-      }else{
+  
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user)); // Store user uniquely
+        const userCartKey = `cart_${user.email}`;
+        const existingCart = JSON.parse(localStorage.getItem(userCartKey)) || [];
+        if(!existingCart.length){
+        localStorage.setItem(`cart_${user.email}`, JSON.stringify([]));} // Initialize empty cart
+        navigate("/"); 
+      } else {
         alert("Invalid credentials");
       }
-    }catch (error){
-      console.error("Login error:",error)
-    }setSubmitting(false);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+    setSubmitting(false);
   };
+  
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

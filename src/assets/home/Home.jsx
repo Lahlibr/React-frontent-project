@@ -3,9 +3,11 @@ import { Outlet, useNavigate } from 'react-router-dom'
 
 import NavItems from '../components/NavItems'
 import Section1 from './Section1'
-import Categories from '../components/Categories'
+import Categories from '../categories/Categories'
 import Section2 from './Section2'
 import Reviews from '../components/Reviews'
+
+import Footer from '../components/Footer'
 
 const Home = () => {
   return (
@@ -16,6 +18,7 @@ const Home = () => {
        <Categories/>
        <Reviews/>
        <Outlet />
+       <Footer/>
 
     </div>
   )
