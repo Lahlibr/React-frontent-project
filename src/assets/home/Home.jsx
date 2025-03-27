@@ -14,7 +14,7 @@ const Home = () => {
     <div>
        <NavItems/> 
        <Section1/>
-       <Section2/>
+       
        <Categories/>
        <Reviews/>
        <Outlet />

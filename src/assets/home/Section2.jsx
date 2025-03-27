@@ -1,50 +1,37 @@
 import React from 'react'
 import { CheckCircle, ShoppingCart, Leaf } from "lucide-react";
+import Section3 from './Section3';
 const Section2 = () => {
-  return (
-   
-      
-
-
-    <section className="bg-yellow-500 py-16 px-6 text-center">
-      <h2 className="text-4xl font-bold text-gray-900 mb-6">
-        Why Choose Our Food?
+  return (<>
+    <section className="relative bg-white text-black text-center py-12 px-4">
+    {/* Text Content */}
+    <div className="relative z-10">
+      <h2 className="text-3xl font-bold">
+        THE BURGER TASTES BETTER WHEN <br /> YOU EAT IT WITH YOUR FAMILY
       </h2>
-      <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-12">
-        We are committed to delivering high-quality, fresh, and original food to our customers.
-        Experience the best taste crafted with love and care.
+      <p className="mt-4 text-lg max-w-[600px] mx-auto">
+        There’s nothing better than sharing a delicious meal with your loved ones! 
+        Savor the rich flavors of our freshly made burgers, crafted with premium ingredients 
+        and served with crispy fries. Enjoy special discounts on family combos and make every 
+        meal a memorable one.
       </p>
-
-      {/* Feature Cards */}
-      <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-        {/* Food Quality */}
-        <div className="bg-gray-100 p-6 rounded-2xl shadow-lg">
-          <CheckCircle size={50} className="text-green-500 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900">Premium Quality</h3>
-          <p className="text-gray-600 mt-2">
-            We use only the finest and freshest ingredients to bring you the highest quality food.
-          </p>
-        </div>
-
-        {/* Order Food */}
-        <div className="bg-gray-100 p-6 rounded-2xl shadow-lg">
-          <ShoppingCart size={50} className="text-yellow-500 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900">Easy Ordering</h3>
-          <p className="text-gray-600 mt-2">
-            Order your favorite meals in just a few clicks and get them delivered hot & fresh.
-          </p>
-        </div>
-
-        {/* Original Food */}
-        <div className="bg-gray-100 p-6 rounded-2xl shadow-lg">
-          <Leaf size={50} className="text-red-500 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900">100% Original</h3>
-          <p className="text-gray-600 mt-2">
-            Our recipes are crafted with authenticity, giving you the real taste of tradition.
-          </p>
-        </div>
-      </div>
-    </section>
+      <a 
+        href="/deals" 
+        className="mt-6 inline-block bg-red-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-800 transition-all"
+      >
+        Explore The Menu
+      </a>
+    </div>
+  
+    {/* ✅ Move Image Outside the `div` and Position it Correctly */}
+    <img
+      src="images/about-1.jpg"
+      alt="About"
+      className="absolute top-24 left-0 w-full h-[40vh]"
+    />
+  </section>
+  <Section3/>
+  </>
   );
 };
 

@@ -4,6 +4,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import Section2 from "./Section2";
 
 const slides = [
   {
@@ -32,9 +33,9 @@ const slides = [
   },
 ];
 
-const Home = () => {
-  return (
-    <div className="bg-gray-100">
+const Section1 = () => {
+  return (<>
+    <div className="bg-gray-100 ">
       {/* Section 1: Hero Swiper */}
       <section className="relative">
         <Swiper
@@ -44,7 +45,7 @@ const Home = () => {
           pagination={{ clickable: true }}
           navigation={false}
           modules={[Autoplay, Pagination, Navigation]}
-          className="w-full h-[500px]"
+          className="w-full h-[70vh]"
         >
           {slides.map((slide, index) => (
             <SwiperSlide key={index}>
@@ -79,36 +80,11 @@ const Home = () => {
       </section>
 
       
-      <section className="relative bg-white text-black text-center py-12 px-4">
-  {/* Text Content */}
-  <div className="relative z-10">
-    <h2 className="text-3xl font-bold">
-      THE BURGER TASTES BETTER WHEN <br /> YOU EAT IT WITH YOUR FAMILY
-    </h2>
-    <p className="mt-4 text-lg max-w-[600px] mx-auto">
-      There’s nothing better than sharing a delicious meal with your loved ones! 
-      Savor the rich flavors of our freshly made burgers, crafted with premium ingredients 
-      and served with crispy fries. Enjoy special discounts on family combos and make every 
-      meal a memorable one.
-    </p>
-    <a 
-      href="/deals" 
-      className="mt-6 inline-block bg-red-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-800 transition-all"
-    >
-      Explore The Menu
-    </a>
-  </div>
-
-  {/* ✅ Move Image Outside the `div` and Position it Correctly */}
-  <img
-    src="images/about-1.jpg"
-    alt="About"
-    className="absolute top-24 left-0 w-full h-[40vh]"
-  />
-</section>
-
+     
+<Section2/>
     </div>
+    </>
   );
 };
 
-export default Home;
+export default Section1;

@@ -29,6 +29,148 @@
       "username": "sjkfjdsklfdksl",
       "email": "fanac@fan",
       "password": "123456789"
+    },
+    {
+      "id": "f4c0",
+      "username": "usersd",
+      "email": "sdfdd@dfdfs",
+      "password": "123456789"
+    },
+    {
+      "id": "1cbc",
+      "username": "user",
+      "email": "user@gmail.com",
+      "password": "123456789"
+    },
+    {
+      "id": "67c6",
+      "username": "user2",
+      "email": "user2@gmail.com",
+      "password": "123456789",
+      "wishlist": [
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "category": "Burgers"
+        }
+      ],
+      "cart": [
+        {
+          "id": 1,
+          "name": "Classic Cheeseburger",
+          "old_price": 220,
+          "new_price": 199,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "A juicy beef patty with melted cheddar cheese, fresh lettuce, tomato, and onions in a soft burger bun.",
+          "img": "images/burger-12.jpg",
+          "quantity": 1
+        },
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "quantity": 2
+        },
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "quantity": 2
+        },
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "quantity": 2
+        },
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "category": "Burgers",
+          "quantity": 2
+        },
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "category": "Burgers",
+          "quantity": 2
+        },
+        {
+          "id": 3,
+          "name": "Peri Peri Chicken Burger",
+          "old_price": 295,
+          "new_price": 259,
+          "offer": "12% Off",
+          "type": "Non-Veg",
+          "rating": 4.6,
+          "description": "Fiery peri peri chicken fillet with spicy mayo, lettuce, and onions in a toasted bun.",
+          "img": "images/burger-15.jpg",
+          "category": "Burgers",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "3852",
+      "username": "user",
+      "email": "user3@gmail.com",
+      "password": "123456789",
+      "wishlist": [
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "category": "Burgers"
+        }
+      ],
+      "cart": []
     }
   ],
   "categories": [
@@ -120,7 +262,7 @@
           "new_price": 149,
           "offer": "20% Off",
           "type": "Veg",
-            "rating": 4.3,
+          "rating": 4.3,
           "description": "Classic Indian-style aloo tikki with tangy tamarind chutney and fresh veggies.",
           "img": "images/burger20.jpg"
         }
@@ -311,6 +453,121 @@
         }
       ],
       "id": "ea9d"
+    }
+  ],
+  "orders": [
+    {
+      "id": "df06",
+      "username": "user",
+      "email": "user3@gmail.com",
+      "address": "123, Street Name, City",
+      "products": [
+        {
+          "id": 7,
+          "name": "Mushroom Swiss Burger",
+          "old_price": 275,
+          "new_price": 249,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "Juicy beef patty with sautéed mushrooms and melted Swiss cheese in a toasted bun.",
+          "img": "images/burgers19.jpg",
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 249
+    },
+    {
+      "id": "c736",
+      "username": "user",
+      "email": "user3@gmail.com",
+      "address": "123, Street Name, City",
+      "products": [
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "quantity": 1
+        },
+        {
+          "id": 3,
+          "name": "Peri Peri Chicken Burger",
+          "old_price": 295,
+          "new_price": 259,
+          "offer": "12% Off",
+          "type": "Non-Veg",
+          "rating": 4.6,
+          "description": "Fiery peri peri chicken fillet with spicy mayo, lettuce, and onions in a toasted bun.",
+          "img": "images/burger-15.jpg",
+          "quantity": 1
+        },
+        {
+          "id": 1,
+          "name": "Classic Cheeseburger",
+          "old_price": 220,
+          "new_price": 199,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "A juicy beef patty with melted cheddar cheese, fresh lettuce, tomato, and onions in a soft burger bun.",
+          "img": "images/burger-12.jpg",
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 637
+    },
+    {
+      "id": "84e5",
+      "username": "user",
+      "email": "user3@gmail.com",
+      "address": "123, Street Name, City",
+      "products": [
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "category": "Burgers",
+          "quantity": 1
+        },
+        {
+          "id": 1,
+          "name": "Classic Cheeseburger",
+          "old_price": 220,
+          "new_price": 199,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "A juicy beef patty with melted cheddar cheese, fresh lettuce, tomato, and onions in a soft burger bun.",
+          "img": "images/burger-12.jpg",
+          "category": "Burgers",
+          "quantity": 1
+        },
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "category": "Burgers"
+        }
+      ],
+      "totalPrice": 557
     }
   ]
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import { FaShoppingCart, FaMapMarkerAlt, FaUser, FaMoneyBillWave } from "react-icons/fa";
 
 const CheckoutPage = () => {
@@ -8,7 +9,25 @@ const CheckoutPage = () => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const [user, setUser] = useState(null);
-
+  const addOrder = async (orderData) => {
+    try {
+      const response = await fetch("http://localhost:3000/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      if (response.ok) {
+        console.log("Order added successfully!");
+      } else {
+        console.error("Failed to add order.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user"));
     if (!userData) {
@@ -18,9 +37,19 @@ const CheckoutPage = () => {
     }
     setUser(userData);
 
-    const storedCart = JSON.parse(localStorage.getItem(`cart_${userData.email}`)) || [];
-    setCart(storedCart);
-    setTotal(storedCart.reduce((sum, item) => sum + item.new_price, 0));
+    // Fetch cart from db.json instead of localStorage
+    axios
+      .get(`http://localhost:3001/users?email=${userData.email}`)
+      .then((response) => {
+        const userData = response.data[0];
+        if (userData && userData.cart) {
+          setCart(userData.cart);
+          setTotal(
+            userData.cart.reduce((sum, item) => sum + item.new_price * (item.quantity || 1), 0)
+          );
+        }
+      })
+      .catch((error) => console.error("Error fetching cart:", error));
   }, [navigate]);
 
   const handlePayment = () => {
@@ -33,28 +62,25 @@ const CheckoutPage = () => {
       image: "https://example.com/logo.png",
       handler: (response) => {
         alert("Payment Successful: " + response.razorpay_payment_id);
-        
-        // Get existing orders or create a new array
-        let existingOrders = JSON.parse(localStorage.getItem("orders")) || [];
-  
-        // Create new order object
+
+        // Store order in db.json (instead of localStorage)
         const newOrder = {
           username: user.username,
           email: user.email,
-          address: "123, Street Name, City", // Replace with actual user input if needed
-          products: cart.map((item) => ({
-            name: item.name,
-            qty: item.qty,
-            price: item.new_price || item.price,
-          })),totalPrice: total,
+          address: "123, Street Name, City",
+          products: cart,
+          totalPrice: total,
         };
-  
-        // Save order in localStorage
-        existingOrders.push(newOrder);
-        localStorage.setItem("orders", JSON.stringify(existingOrders));
-  
-        // Clear cart and navigate to orders
-        localStorage.removeItem(`cart_${user.email}`);
+
+        axios
+          .get(`http://localhost:3001/orders`)
+          .then((res) => {
+            axios.post(`http://localhost:3001/orders`, newOrder);
+          });
+
+        // Clear cart in db.json
+        axios.patch(`http://localhost:3001/users/${user.id}`, { cart: [] });
+
         navigate("/orders");
       },
       prefill: {
@@ -63,14 +89,13 @@ const CheckoutPage = () => {
       },
       theme: { color: "#4CAF50" },
     };
-  
+
     const mockRazorpay = {
       open: () => setTimeout(() => options.handler({ razorpay_payment_id: "mock_payment_id_12345" }), 1000),
     };
-  
+
     mockRazorpay.open();
   };
-  
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row justify-center items-center bg-gradient-to-r from-blue-50 to-indigo-100 p-6">
@@ -81,12 +106,19 @@ const CheckoutPage = () => {
         </h2>
         {user && (
           <div className="bg-gray-100 p-4 rounded-lg space-y-2 text-gray-700 shadow-md">
-            <p className="flex items-center gap-2"><FaUser className="text-gray-500" /> {user.name}</p>
-            <p className="flex items-center gap-2"><FaMapMarkerAlt className="text-red-500" /> 123, Street Name, City</p>
+            <p className="flex items-center gap-2">
+              <FaUser className="text-gray-500" /> {user.username}
+            </p>
+            <p className="flex items-center gap-2">
+              <FaMapMarkerAlt className="text-red-500" /> 123, Street Name, City
+            </p>
           </div>
         )}
         <div className="bg-blue-100 p-4 rounded-lg text-gray-700 shadow-md">
-          <p className="font-semibold"><FaMoneyBillWave className="text-green-500 inline mr-2" />Estimated Delivery: 3-5 Business Days</p>
+          <p className="font-semibold">
+            <FaMoneyBillWave className="text-green-500 inline mr-2" />
+            Estimated Delivery: 3-5 Business Days
+          </p>
         </div>
         <img
           src="https://cdn-icons-png.flaticon.com/512/1584/1584895.png"
@@ -106,8 +138,10 @@ const CheckoutPage = () => {
             <div className="space-y-4">
               {cart.map((item) => (
                 <div key={item.id} className="flex justify-between p-2 border-b text-lg text-gray-800">
-                  <span>{item.name}</span>
-                  <span className="font-semibold text-green-600">₹{item.new_price}</span>
+                  <span>{item.name} (x{item.quantity || 1})</span>
+                  <span className="font-semibold text-green-600">
+                    ₹{item.new_price * (item.quantity || 1)}
+                  </span>
                 </div>
               ))}
             </div>

@@ -3,6 +3,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Heart, Trash, Menu } from "lucide-react";
 import { categories } from "../categories/Categories";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const WishlistPage = memo(() => {
   const navigate = useNavigate();
@@ -19,36 +22,60 @@ const WishlistPage = memo(() => {
       alert("Please log in to view your wishlist.");
       navigate("/login");
     } else {
-      const storedWishlist = JSON.parse(localStorage.getItem(`wishlist_${storedUser.email}`)) || [];
-      setWishlist(storedWishlist);
+      fetchWishlist(storedUser.email);
     }
-  }, []); // ✅ Runs only once when component mounts
+  }, [location]); // ✅ Updates when URL changes
 
-  useEffect(() => {
-    if (user) {
-      const storedWishlist = JSON.parse(localStorage.getItem(`wishlist_${user.email}`)) || [];
-      setWishlist(storedWishlist);
+  // Fetch wishlist from db.json
+  const fetchWishlist = async (email) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/users?email=${email}`);
+      const userData = response.data[0];
+      if (userData && userData.wishlist) {
+        setWishlist(userData.wishlist);
+      }
+    } catch (error) {
+      console.error("Error fetching wishlist:", error);
     }
-  }, [location]); // ✅ Updates wishlist when URL changes
-
-  const removeFromWishlist = (productId) => {
-    setWishlist((prevWishlist) => {
-      const updatedWishlist = prevWishlist.filter((item) => item.id !== productId);
-      localStorage.setItem(`wishlist_${user.email}`, JSON.stringify(updatedWishlist));
-      return updatedWishlist;
-    });
   };
 
-  const moveToCart = (product) => {
-    if (!user) {
-      navigate("/login");
-      return;
+  // Update wishlist in db.json
+  const updateWishlist = async (updatedWishlist) => {
+    try {
+      const { data } = await axios.get(`http://localhost:3001/users?email=${user.email}`);
+      const userData = data[0];
+
+      if (userData) {
+        await axios.patch(`http://localhost:3001/users/${userData.id}`, { wishlist: updatedWishlist });
+        setWishlist(updatedWishlist);
+      }
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
     }
-    const userCartKey = `cart_${user.email}`;
-    const currentCart = JSON.parse(localStorage.getItem(userCartKey)) || [];
-    localStorage.setItem(userCartKey, JSON.stringify([...currentCart, product]));
-    removeFromWishlist(product.id);
-    alert("Item moved to cart!");
+  };
+
+  // Remove item from wishlist
+  const removeFromWishlist = (productId) => {
+    const updatedWishlist = wishlist.filter((item) => item.id !== productId);
+    updateWishlist(updatedWishlist);
+    toast.success("Item removed from wishlist!");
+  };
+
+  // Move item to cart
+  const moveToCart = async (product) => {
+    try {
+      const { data } = await axios.get(`http://localhost:3001/users?email=${user.email}`);
+      const userData = data[0];
+
+      if (userData) {
+        const updatedCart = [...(userData.cart || []), product];
+        await axios.patch(`http://localhost:3001/users/${userData.id}`, { cart: updatedCart });
+        removeFromWishlist(product.id);
+        toast.success("Item moved to cart!");
+      }
+    } catch (error) {
+      console.error("Error moving item to cart:", error);
+    }
   };
 
   return (
@@ -112,6 +139,8 @@ const WishlistPage = memo(() => {
           <p className="text-gray-500 text-lg text-center">Your wishlist is empty. Start adding your favorite items! 💕</p>
         )}
       </main>
+
+      <ToastContainer />
     </div>
   );
 });
