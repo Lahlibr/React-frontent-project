@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,13 +7,13 @@ import "react-toastify/dist/ReactToastify.css";
 const CartPage = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
     if (!user) {
       alert("Please log in to view your cart.");
-      return navigate("/login");
+      navigate("/login");
+      return;
     }
 
     // Fetch cart from db.json
@@ -28,7 +28,6 @@ const CartPage = () => {
       .catch((error) => console.error("Error fetching cart:", error));
   }, [user, navigate]);
 
-  // Update cart in db.json
   const updateCart = async (updatedCart) => {
     try {
       const { data } = await axios.get(`http://localhost:3001/users?email=${user.email}`);
@@ -43,14 +42,12 @@ const CartPage = () => {
     }
   };
 
-  // Remove item from cart
   const removeFromCart = (productId) => {
     const updatedCart = cart.filter((item) => item.id !== productId);
     updateCart(updatedCart);
     toast.success("Item removed from cart!");
   };
 
-  // Change item quantity
   const changeQuantity = (productId, amount) => {
     const updatedCart = cart.map((item) =>
       item.id === productId
@@ -60,12 +57,15 @@ const CartPage = () => {
     updateCart(updatedCart);
   };
 
-  // Calculate total price
   const getTotalPrice = () => cart.reduce((total, item) => total + item.new_price * (item.quantity || 1), 0);
+
+  // ✅ Move `handleBuyNow` outside `useEffect`
+  const handleBuyNow = useCallback(() => {
+    navigate("/checkout");
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row p-6">
-      {/* Left Section - Deals */}
       <div className="hidden md:flex flex-col w-1/4 bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-lg font-bold mb-4">🌟 Featured Deal</h3>
         <img src="images/add1.jpeg" alt="Featured Product" className="rounded-lg shadow-md mb-4" />
@@ -73,7 +73,6 @@ const CartPage = () => {
         <button className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Shop Now</button>
       </div>
 
-      {/* Center Section - Cart Items */}
       <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md mx-4">
         {user && (
           <div className="mb-6 flex items-center">
@@ -106,12 +105,13 @@ const CartPage = () => {
         )}
       </div>
 
-      {/* Right Section - Order Summary */}
       <div className="w-full md:w-1/4 bg-white p-6 rounded-lg shadow-md mt-6 md:mt-0">
         <h3 className="text-lg font-bold mb-4">🛒 Order Summary</h3>
         <p className="text-gray-600">Items in Cart: <strong>{cart.length}</strong></p>
         <p className="text-gray-600 mt-2">Total Price: <span className="text-green-500 font-bold">₹{getTotalPrice()}</span></p>
-        <button className="mt-4 px-6 py-2 bg-green-500 text-white rounded-md w-full hover:bg-green-700">Proceed to Checkout</button>
+        <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 w-full" onClick={handleBuyNow}>
+          Proceed to checkout
+        </button>
       </div>
 
       <ToastContainer />

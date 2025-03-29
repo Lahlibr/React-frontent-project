@@ -9,7 +9,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/categories")
+      .get("http://localhost:3001/categories")
       .then((response) => {
         const products = response.data.flatMap((category) =>
           category.products.map((product, index) => ({

@@ -49,6 +49,42 @@
       "password": "123456789",
       "wishlist": [
         {
+          "id": 7,
+          "name": "Mushroom Swiss Burger",
+          "old_price": 275,
+          "new_price": 249,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "Juicy beef patty with sautéed mushrooms and melted Swiss cheese in a toasted bun.",
+          "img": "images/burgers19.jpg",
+          "category": "Burgers"
+        },
+        {
+          "id": 5,
+          "name": "Crispy Veggie Burger",
+          "old_price": 175,
+          "new_price": 159,
+          "offer": "8% Off",
+          "type": "Veg",
+          "rating": 4.2,
+          "description": "Crispy vegetable patty with lettuce, tomato, and tangy mayo in a soft sesame bun.",
+          "img": "images/burger-17.jpg",
+          "category": "Burgers"
+        },
+        {
+          "id": 3,
+          "name": "Peri Peri Chicken Burger",
+          "old_price": 295,
+          "new_price": 259,
+          "offer": "12% Off",
+          "type": "Non-Veg",
+          "rating": 4.6,
+          "description": "Fiery peri peri chicken fillet with spicy mayo, lettuce, and onions in a toasted bun.",
+          "img": "images/burger-15.jpg",
+          "category": "Burgers"
+        },
+        {
           "id": 2,
           "name": "Paneer Tikka Burger",
           "old_price": 210,
@@ -61,95 +97,7 @@
           "category": "Burgers"
         }
       ],
-      "cart": [
-        {
-          "id": 1,
-          "name": "Classic Cheeseburger",
-          "old_price": 220,
-          "new_price": 199,
-          "offer": "10% Off",
-          "type": "Non-Veg",
-          "rating": 4.5,
-          "description": "A juicy beef patty with melted cheddar cheese, fresh lettuce, tomato, and onions in a soft burger bun.",
-          "img": "images/burger-12.jpg",
-          "quantity": 1
-        },
-        {
-          "id": 2,
-          "name": "Paneer Tikka Burger",
-          "old_price": 210,
-          "new_price": 179,
-          "offer": "15% Off",
-          "type": "Veg",
-          "rating": 4.4,
-          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
-          "img": "images/burger-13.jpg",
-          "quantity": 2
-        },
-        {
-          "id": 2,
-          "name": "Paneer Tikka Burger",
-          "old_price": 210,
-          "new_price": 179,
-          "offer": "15% Off",
-          "type": "Veg",
-          "rating": 4.4,
-          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
-          "img": "images/burger-13.jpg",
-          "quantity": 2
-        },
-        {
-          "id": 2,
-          "name": "Paneer Tikka Burger",
-          "old_price": 210,
-          "new_price": 179,
-          "offer": "15% Off",
-          "type": "Veg",
-          "rating": 4.4,
-          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
-          "img": "images/burger-13.jpg",
-          "quantity": 2
-        },
-        {
-          "id": 2,
-          "name": "Paneer Tikka Burger",
-          "old_price": 210,
-          "new_price": 179,
-          "offer": "15% Off",
-          "type": "Veg",
-          "rating": 4.4,
-          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
-          "img": "images/burger-13.jpg",
-          "category": "Burgers",
-          "quantity": 2
-        },
-        {
-          "id": 2,
-          "name": "Paneer Tikka Burger",
-          "old_price": 210,
-          "new_price": 179,
-          "offer": "15% Off",
-          "type": "Veg",
-          "rating": 4.4,
-          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
-          "img": "images/burger-13.jpg",
-          "category": "Burgers",
-          "quantity": 2
-        },
-        {
-          "id": 3,
-          "name": "Peri Peri Chicken Burger",
-          "old_price": 295,
-          "new_price": 259,
-          "offer": "12% Off",
-          "type": "Non-Veg",
-          "rating": 4.6,
-          "description": "Fiery peri peri chicken fillet with spicy mayo, lettuce, and onions in a toasted bun.",
-          "img": "images/burger-15.jpg",
-          "category": "Burgers",
-          "quantity": 1
-        }
-      ]
+      "cart": []
     },
     {
       "id": "3852",
@@ -168,9 +116,38 @@
           "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
           "img": "images/burger-13.jpg",
           "category": "Burgers"
+        },
+        {
+          "id": 5,
+          "name": "Crispy Veggie Burger",
+          "old_price": 175,
+          "new_price": 159,
+          "offer": "8% Off",
+          "type": "Veg",
+          "rating": 4.2,
+          "description": "Crispy vegetable patty with lettuce, tomato, and tangy mayo in a soft sesame bun.",
+          "img": "images/burger-17.jpg",
+          "category": "Burgers"
         }
       ],
       "cart": []
+    },
+    {
+      "id": "3b8f",
+      "username": "user4",
+      "email": "user4@gmail.com",
+      "password": "12345678",
+      "wishlist": [],
+      "cart": []
+    }
+  ],
+  "admin": [
+    {
+      "id": "1",
+      "username": "lahlibrahim",
+      "email": "lahl123@gmail.com",
+      "password": "lahl@123",
+      "role": "admin"
     }
   ],
   "categories": [
@@ -276,35 +253,35 @@
         {
           "id": 4,
           "name": "Margherita Pizza",
-          "price": 299,
+          "new_price": 299,
           "type": "Veg",
           "fresh": true,
           "rating": 4.7,
           "description": "Classic Margherita pizza with fresh basil, mozzarella cheese, and a tangy tomato sauce base.",
-          "img": "images/margherita-pizza.jpg"
+          "img": "images/pizza.jpeg"
         },
         {
           "id": 5,
           "name": "Pepperoni Pizza",
-          "price": 349,
+          "new_price": 349,
           "type": "Non-Veg",
           "fresh": true,
           "rating": 4.8,
           "description": "Spicy pepperoni slices layered over gooey mozzarella and a crispy crust.",
-          "img": "images/pepperoni-pizza.jpg"
+          "img": "images/pizza.jpeg"
         },
         {
           "id": 6,
           "name": "BBQ Chicken Pizza",
-          "price": 369,
+          "new_price": 369,
           "type": "Non-Veg",
           "fresh": true,
           "rating": 4.6,
           "description": "BBQ chicken with onions, jalapeños, and a smoky BBQ sauce drizzle on a crispy thin crust.",
-          "img": "images/bbq-chicken-pizza.jpg"
+          "img": "images/pizza.jpeg"
         }
       ],
-      "id": "8f7c"
+      "id": "3d3e"
     },
     {
       "name": "Desserts",
@@ -313,32 +290,32 @@
         {
           "id": 7,
           "name": "Chocolate Brownie",
-          "price": 149,
+          "new_price": 149,
           "type": "Veg",
           "fresh": true,
           "rating": 4.7,
           "description": "Rich and fudgy chocolate brownie served warm with a scoop of vanilla ice cream.",
-          "img": "images/chocolate-brownie.jpg"
+          "img": "images/desearts.jpeg"
         },
         {
           "id": 8,
           "name": "Strawberry Cheesecake",
-          "price": 249,
+          "new_price": 249,
           "type": "Veg",
           "fresh": true,
           "rating": 4.8,
           "description": "Creamy cheesecake topped with fresh strawberry sauce and whipped cream.",
-          "img": "images/strawberry-cheesecake.jpg"
+          "img": "images/desearts.jpeg"
         },
         {
           "id": 9,
           "name": "Tiramisu",
-          "price": 269,
+          "new_price": 269,
           "type": "Veg",
           "fresh": true,
           "rating": 4.9,
           "description": "Italian coffee-flavored dessert with layers of mascarpone and cocoa powder.",
-          "img": "images/tiramisu.jpg"
+          "img": "images/desearts.jpeg"
         }
       ],
       "id": "9f31"
@@ -350,32 +327,32 @@
         {
           "id": 10,
           "name": "Alfredo Pasta",
-          "price": 299,
+          "new_price": 299,
           "type": "Veg",
           "fresh": true,
           "rating": 4.5,
           "description": "Creamy Alfredo sauce with fettuccine pasta and parmesan cheese.",
-          "img": "images/alfredo-pasta.jpg"
+          "img": "images/pastaa.jpeg"
         },
         {
           "id": 11,
           "name": "Penne Arrabbiata",
-          "price": 249,
+          "new_price": 249,
           "type": "Veg",
           "fresh": true,
           "rating": 4.4,
           "description": "Spicy red sauce pasta with garlic, chili flakes, and fresh basil.",
-          "img": "images/penne-arrabbiata.jpg"
+          "img": "images/pastaa.jpeg"
         },
         {
           "id": 12,
           "name": "Chicken Pesto Pasta",
-          "price": 329,
+          "new_price": 329,
           "type": "Non-Veg",
           "fresh": true,
           "rating": 4.6,
           "description": "Grilled chicken tossed in basil pesto sauce with linguine pasta.",
-          "img": "images/chicken-pesto-pasta.jpg"
+          "img": "images/pastaa.jpeg"
         }
       ],
       "id": "ead0"
@@ -387,32 +364,22 @@
         {
           "id": 13,
           "name": "Mango Smoothie",
-          "price": 179,
+          "new_price": 179,
           "type": "Veg",
           "fresh": true,
           "rating": 4.5,
           "description": "Refreshing mango smoothie made with fresh mango pulp and yogurt.",
-          "img": "images/mango-smoothie.jpg"
+          "img": "images/drinkss.jpeg"
         },
         {
           "id": 14,
           "name": "Lemon Iced Tea",
-          "price": 129,
+          "new_price": 129,
           "type": "Veg",
           "fresh": true,
           "rating": 4.3,
           "description": "Chilled lemon-infused iced tea with a hint of mint.",
-          "img": "images/lemon-iced-tea.jpg"
-        },
-        {
-          "id": 15,
-          "name": "Cold Coffee",
-          "price": 199,
-          "type": "Veg",
-          "fresh": true,
-          "rating": 4.7,
-          "description": "Iced coffee blended with milk, sugar, and topped with chocolate syrup.",
-          "img": "images/cold-coffee.jpg"
+          "img": "images/drinkss.jpeg"
         }
       ],
       "id": "9f78"
@@ -424,32 +391,32 @@
         {
           "id": 16,
           "name": "Grilled Salmon",
-          "price": 499,
+          "new_price": 499,
           "type": "Non-Veg",
           "fresh": true,
           "rating": 4.8,
           "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
-          "img": "images/grilled-salmon.jpg"
+          "img": "images/seafoodss.jpeg"
         },
         {
           "id": 17,
           "name": "Prawn Tempura",
-          "price": 399,
+          "new_price": 399,
           "type": "Non-Veg",
           "fresh": true,
           "rating": 4.7,
           "description": "Crispy battered prawns served with a sweet chili dipping sauce.",
-          "img": "images/prawn-tempura.jpg"
+          "img": "images/seafoodss.jpeg"
         },
         {
           "id": 18,
           "name": "Lobster Thermidor",
-          "price": 699,
+          "new_price": 699,
           "type": "Non-Veg",
           "fresh": true,
           "rating": 4.9,
           "description": "Lobster baked in a creamy cheese sauce with herbs and white wine.",
-          "img": "images/lobster-thermidor.jpg"
+          "img": "images/seafoodss.jpeg"
         }
       ],
       "id": "ea9d"
@@ -478,9 +445,34 @@
       "totalPrice": 249
     },
     {
-      "id": "c736",
-      "username": "user",
-      "email": "user3@gmail.com",
+      "id": "3397",
+      "userId": "3b8f",
+      "username": "user4",
+      "email": "user4@gmail.com",
+      "address": "123, Street Name, City",
+      "products": [
+        {
+          "id": 1,
+          "name": "Classic Cheeseburger",
+          "old_price": 220,
+          "new_price": 199,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "A juicy beef patty with melted cheddar cheese, fresh lettuce, tomato, and onions in a soft burger bun.",
+          "img": "images/burger-12.jpg",
+          "category": "Burgers",
+          "quantity": 3
+        }
+      ],
+      "totalPrice": 597,
+      "date": "2025-03-29T12:05:49.377Z"
+    },
+    {
+      "id": "7531",
+      "userId": "67c6",
+      "username": "user2",
+      "email": "user2@gmail.com",
       "address": "123, Street Name, City",
       "products": [
         {
@@ -493,7 +485,31 @@
           "rating": 4.4,
           "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
           "img": "images/burger-13.jpg",
-          "quantity": 1
+          "quantity": 3
+        },
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "quantity": 3
+        },
+        {
+          "id": 2,
+          "name": "Paneer Tikka Burger",
+          "old_price": 210,
+          "new_price": 179,
+          "offer": "15% Off",
+          "type": "Veg",
+          "rating": 4.4,
+          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
+          "img": "images/burger-13.jpg",
+          "quantity": 3
         },
         {
           "id": 3,
@@ -505,6 +521,59 @@
           "rating": 4.6,
           "description": "Fiery peri peri chicken fillet with spicy mayo, lettuce, and onions in a toasted bun.",
           "img": "images/burger-15.jpg",
+          "category": "Burgers",
+          "quantity": 2
+        },
+        {
+          "id": 4,
+          "name": "BBQ Bacon Burger",
+          "old_price": 340,
+          "new_price": 279,
+          "offer": "18% Off",
+          "type": "Non-Veg",
+          "rating": 4.7,
+          "description": "Smoky bacon, BBQ sauce, crispy onions, and melted cheese on a juicy beef patty.",
+          "img": "images/burger-16.jpg",
+          "category": "Burgers",
+          "quantity": 1
+        },
+        {
+          "id": 7,
+          "name": "Mushroom Swiss Burger",
+          "old_price": 275,
+          "new_price": 249,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "Juicy beef patty with sautéed mushrooms and melted Swiss cheese in a toasted bun.",
+          "img": "images/burgers19.jpg",
+          "category": "Burgers",
+          "quantity": 2
+        },
+        {
+          "id": 8,
+          "name": "Aloo Tikki Burger",
+          "old_price": 186,
+          "new_price": 149,
+          "offer": "20% Off",
+          "type": "Veg",
+          "rating": 4.3,
+          "description": "Classic Indian-style aloo tikki with tangy tamarind chutney and fresh veggies.",
+          "img": "images/burger20.jpg",
+          "category": "Burgers",
+          "quantity": 1
+        },
+        {
+          "id": 6,
+          "name": "Spicy Mexican Burger",
+          "old_price": 265,
+          "new_price": 229,
+          "offer": "14% Off",
+          "type": "Non-Veg",
+          "rating": 4.6,
+          "description": "Spiced beef patty with jalapeños, nacho chips, spicy salsa, and cheddar cheese.",
+          "img": "images/burger-18.jpg",
+          "category": "Burgers",
           "quantity": 1
         },
         {
@@ -517,30 +586,57 @@
           "rating": 4.5,
           "description": "A juicy beef patty with melted cheddar cheese, fresh lettuce, tomato, and onions in a soft burger bun.",
           "img": "images/burger-12.jpg",
+          "category": "Burgers",
+          "quantity": 1
+        },
+        {
+          "id": 5,
+          "name": "Crispy Veggie Burger",
+          "old_price": 175,
+          "new_price": 159,
+          "offer": "8% Off",
+          "type": "Veg",
+          "rating": 4.2,
+          "description": "Crispy vegetable patty with lettuce, tomato, and tangy mayo in a soft sesame bun.",
+          "img": "images/burger-17.jpg",
+          "category": "Burgers",
           "quantity": 1
         }
       ],
-      "totalPrice": 637
+      "totalPrice": 3642,
+      "date": "2025-03-29T12:13:21.135Z"
     },
     {
-      "id": "84e5",
-      "username": "user",
-      "email": "user3@gmail.com",
+      "id": "ef5b",
+      "userId": "67c6",
+      "username": "user2",
+      "email": "user2@gmail.com",
       "address": "123, Street Name, City",
       "products": [
         {
-          "id": 2,
-          "name": "Paneer Tikka Burger",
-          "old_price": 210,
-          "new_price": 179,
-          "offer": "15% Off",
-          "type": "Veg",
-          "rating": 4.4,
-          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
-          "img": "images/burger-13.jpg",
+          "id": 7,
+          "name": "Mushroom Swiss Burger",
+          "old_price": 275,
+          "new_price": 249,
+          "offer": "10% Off",
+          "type": "Non-Veg",
+          "rating": 4.5,
+          "description": "Juicy beef patty with sautéed mushrooms and melted Swiss cheese in a toasted bun.",
+          "img": "images/burgers19.jpg",
           "category": "Burgers",
           "quantity": 1
-        },
+        }
+      ],
+      "totalPrice": 249,
+      "date": "2025-03-29T12:14:04.038Z"
+    },
+    {
+      "id": "7e2a",
+      "userId": "3b8f",
+      "username": "user4",
+      "email": "user4@gmail.com",
+      "address": "123, Street Name, City",
+      "products": [
         {
           "id": 1,
           "name": "Classic Cheeseburger",
@@ -553,21 +649,10 @@
           "img": "images/burger-12.jpg",
           "category": "Burgers",
           "quantity": 1
-        },
-        {
-          "id": 2,
-          "name": "Paneer Tikka Burger",
-          "old_price": 210,
-          "new_price": 179,
-          "offer": "15% Off",
-          "type": "Veg",
-          "rating": 4.4,
-          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
-          "img": "images/burger-13.jpg",
-          "category": "Burgers"
         }
       ],
-      "totalPrice": 557
+      "totalPrice": 199,
+      "date": "2025-03-29T14:32:16.672Z"
     }
   ]
 }

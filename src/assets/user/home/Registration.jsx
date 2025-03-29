@@ -2,10 +2,10 @@ import { Formik, Form } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import InputField from "../components/Input";
-import { registrationSchema } from "../components/Validation";
+import InputField from "../../components/Input";
+import { registrationSchema } from "../../components/Validation";
 import { useCallback, useMemo } from "react";
-import NavItems from "../components/NavItems";
+import NavItems from "../../components/NavItems";
 
 const Registration = () => {
   const navigate = useNavigate();
