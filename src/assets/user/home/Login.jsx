@@ -5,6 +5,23 @@ import axios from "axios";
 import InputField from "../../components/Input";
 import { loginSchema } from "../../components/Validation";
 import NavItems from "../../components/NavItems";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const mergeCarts = (userCart, guestCart) => {
+  const mergedCart = [...userCart];
+
+  guestCart.forEach((guestItem) => {
+    const existingItem = mergedCart.find((item) => item.id === guestItem.id);
+    if (existingItem) {
+      existingItem.quantity = (existingItem.quantity || 0) + (guestItem.quantity || 1); 
+    } else {
+      mergedCart.push({ ...guestItem, quantity: guestItem.quantity || 1 });
+    }
+  });
+
+  return mergedCart;
+};
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,15 +29,37 @@ const Login = () => {
   const handleSubmit = useCallback(async (values, { setSubmitting }) => {
     try {
       const { data: users } = await axios.get("http://localhost:3001/users");
-      const user = users.find(user => user.email === values.email && user.password === values.password);
+      const user = users.find((u) => u.email === values.email && u.password === values.password);
+  
       if (user) {
-        localStorage.setItem("user", JSON.stringify(user));
-        navigate("/");
+        if (user.blocked) {
+          toast.error("Your account has been blocked.");
+        } else {
+          // Retrieve guest cart
+          const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
+  
+          // Merge guest cart with user's cart
+          const updatedCart = mergeCarts(user.cart || [], guestCart);
+  
+          // Update user cart in db.json
+          const updatedUser = { ...user, cart: updatedCart };
+          await axios.patch(`http://localhost:3001/users/${user.id}`, { cart: updatedCart });
+  
+          // Store updated user in localStorage
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+  
+          // Remove guest cart from localStorage
+          localStorage.removeItem("guestCart");
+  
+          toast.success("Login successful!");
+          navigate("/");
+        }
       } else {
-        alert("Invalid credentials");
+        toast.error("Invalid credentials.");
       }
     } catch (error) {
       console.error("Login error:", error);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -41,13 +80,19 @@ const Login = () => {
               <Form>
                 <InputField label="Email" name="email" type="email" />
                 <InputField label="Password" name="password" type="password" />
-                <button type="submit" disabled={isSubmitting} className="w-full bg-blue-500 text-white p-2 mt-2.5 rounded hover:bg-blue-600">
-                  Login
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting} 
+                  className="w-full bg-blue-500 text-white p-2 mt-2.5 rounded hover:bg-blue-600"
+                >
+                  {isSubmitting ? "Logging in..." : "Login"}
                 </button>
               </Form>
             )}
           </Formik>
-          <p className="text-sm mt-4">Don't have an account? <a href="/registration" className="text-blue-500">Register</a></p>
+          <p className="text-sm mt-4">
+            Don't have an account? <a href="/registration" className="text-blue-500">Register</a>
+          </p>
         </div>
       </div>
     </>

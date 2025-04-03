@@ -13,13 +13,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       icon: FaBox,
       subItems: [
         { name: "View Products", icon: FaList, path: "/admin-products" },
-        { name: "Add Product", icon: FaPlus, path: "/add-product" }
+        { name: "Deleted Products", icon: FaPlus, path: "/admin-deletedProducts" }
       ]
     },
     { name: "Cart", icon: FaShoppingCart, path: "/cart" },
     { name: "Settings", icon: FaCog, path: "/settings" },
     { name: "Profile", icon: FaUser, path: "/profile" },
-    { name: "Users", icon: FaUsers, path: "/admin-users" },
+    { name: "Users", icon: FaUsers, path: "/admin-customers" },
     { name: "Admin Panel", icon: FaKey, path: "/admin-dashboard" }
   ];
 

@@ -1,85 +1,116 @@
-import React, { createContext, useState, useMemo } from "react";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import React, { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const UserContext = createContext();
 
-const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [wishlist, setWishlist] = useState([]);
+  const [cart, setCart] = useState([]);
 
-  const updateUserState = (updatedUser) => {
-    setUser(updatedUser);
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-  };
-
-  const updateWishlist = async (product, e) => {
-    e.preventDefault();
-    
-    if (e) e.preventDefault();
-    if (!user) return toast.warn("Please log in to update your wishlist!");
-
-    const updatedWishlist = user.wishlist?.some(item => item.id === product.id)
-      ? user.wishlist.filter(item => item.id !== product.id)
-      : [...(user.wishlist || []), product];
-
-    updateUserState({ ...user, wishlist: updatedWishlist });
-
-    await axios.patch(`http://localhost:3001/users/${user.id}`, { wishlist: updatedWishlist });
-    toast.success(updatedWishlist.some(item => item.id === product.id) ? "Added to Wishlist" : "Removed from Wishlist");
-  };
-
-  const updateCart = async (product) => {
-    if (!user) {
-      toast.warn("Please log in to add items to the cart.");
-      return;
+  // Initialize user from localStorage on mount
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      setUser(storedUser);
+      setCart(storedUser.cart || []);
+      setWishlist(storedUser.wishlist || []);
+    } else {
+      // Load guest cart and wishlist
+      const guestCart = JSON.parse(localStorage.getItem('guestCart')) || [];
+      const guestWishlist = JSON.parse(localStorage.getItem('guestWishlist')) || [];
+      setCart(guestCart);
+      setWishlist(guestWishlist);
     }
-  
+  }, []);
+
+  // Update cart in storage (API for users, localStorage for guests)
+  const updateCart = async (product) => {
     try {
-      // Fetch the latest user data to get the actual cart state
-      const userResponse = await axios.get(`http://localhost:3001/users/${user.id}`);
-      const latestUserData = userResponse.data;
-      const latestCart = latestUserData.cart || [];
-  
-      const isProductInCart = latestCart.some(item => item.id === product.id);
-      
       let updatedCart;
-      if (isProductInCart) {
-        updatedCart = latestCart.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      const existingItemIndex = cart.findIndex(item => item.id === product.id);
+  
+      if (existingItemIndex >= 0) {
+        // Update quantity if item exists
+        updatedCart = cart.map((item, index) => 
+          index === existingItemIndex 
+            ? { ...item, quantity: (item.quantity || 1) + 1 } 
+            : item
         );
       } else {
-        updatedCart = [...latestCart, { ...product, quantity: 1 }];
+        // Add new item to cart with quantity 1
+        updatedCart = [...cart, { ...product, quantity: 1 }];
       }
   
-      // Update cart in the database
-      await axios.patch(`http://localhost:3001/users/${user.id}`, { cart: updatedCart });
+      if (user) {
+        // Update in API for logged-in users
+        await axios.patch(`http://localhost:3001/users/${user.id}`, {
+          cart: updatedCart
+        });
+        const updatedUser = { ...user, cart: updatedCart };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+      } else {
+        // Update localStorage for guest users
+        localStorage.setItem('guestCart', JSON.stringify(updatedCart));
+      }
   
-      // Fetch updated user data again
-      const updatedResponse = await axios.get(`http://localhost:3001/users/${user.id}`);
-      const updatedUserData = updatedResponse.data;
-  
-      // Update local state
-      updateUserState(updatedUserData);
-  
-      toast.success(isProductInCart ? "Quantity Updated" : "Added to Cart");
+      setCart(updatedCart);
+      return updatedCart;
     } catch (error) {
-      console.error("Error updating cart:", error);
-      toast.error("Failed to update cart.");
+      console.error('Error updating cart:', error);
+      toast.error('Failed to update cart');
+      return cart; // Return current cart on error
     }
   };
-  
-  
-  
+
+  // Update wishlist
+  const updateWishlist = async (product) => {
+    try {
+      let updatedWishlist;
+      const existingItemIndex = wishlist.findIndex(item => item.id === product.id);
+
+      if (existingItemIndex >= 0) {
+        // Remove item from wishlist if it exists
+        updatedWishlist = wishlist.filter((_, index) => index !== existingItemIndex);
+      } else {
+        // Add new item to wishlist
+        updatedWishlist = [...wishlist, product];
+      }
+
+      if (user) {
+        // Update in API for logged-in users
+        await axios.patch(`http://localhost:3001/users/${user.id}`, {
+          wishlist: updatedWishlist
+        });
+        const updatedUser = { ...user, wishlist: updatedWishlist };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+      } else {
+        // Update localStorage for guest users
+        localStorage.setItem('guestWishlist', JSON.stringify(updatedWishlist));
+      }
+
+      setWishlist(updatedWishlist);
+      return updatedWishlist;
+    } catch (error) {
+      console.error('Error updating wishlist:', error);
+      toast.error('Failed to update wishlist');
+      return wishlist; // Return current wishlist on error
+    }
+  };
 
   return (
-    <UserContext.Provider value={{ user, wishlist: user?.wishlist || [], cart: user?.cart || [], updateWishlist, updateCart }}>
+    <UserContext.Provider value={{
+      user,
+      wishlist,
+      cart,
+      updateCart,
+      updateWishlist,
+      // other context values
+    }}>
       {children}
-      <ToastContainer />
     </UserContext.Provider>
   );
 };
-
-export default UserProvider;

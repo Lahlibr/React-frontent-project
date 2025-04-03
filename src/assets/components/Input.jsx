@@ -1,7 +1,7 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 //React.memo ensures the component re-renders only if label, name, or type changes.
-const InputField = React.memo(({ label, name, type = "text" }) => (
+const InputField = React.memo(({ label, name, type = "text",value, onChange }) => (
   <div className="mb-4">
     <label className="block text-sm font-bold">{label}</label>
     <Field name={name} type={type} className="w-full p-2 border rounded" />
@@ -10,3 +10,4 @@ const InputField = React.memo(({ label, name, type = "text" }) => (
 ));
 
 export default InputField;
+ 

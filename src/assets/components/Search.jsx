@@ -14,9 +14,11 @@ const SearchComponent = () => {
       .then((res) => res.json())
       .then((categories) =>
         setProducts(categories.flatMap((category) =>
-          category.products.map((product) => ({ ...product, category: category.name }))
-        ))
-      )
+          category.products.map((product) => ({ 
+            ...product, 
+            category: category.name || 'uncategorized' // Add fallback
+          }))
+        )))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
@@ -26,13 +28,21 @@ const SearchComponent = () => {
       setSearchResults([]);
       return;
     }
+    
     const lowerQuery = query.toLowerCase();
+    
     setSearchResults(
-      products.filter(
-        (product) =>
-          product.name.toLowerCase().includes(lowerQuery) ||
-          product.category?.toLowerCase().includes(lowerQuery)
-      )
+      products.filter((product) => {
+        // Skip products without names
+        if (!product.name) return false;
+        
+        const nameMatch = product.name.toLowerCase().includes(lowerQuery);
+        const categoryMatch = product.category 
+          ? product.category.toLowerCase().includes(lowerQuery)
+          : false;
+        
+        return nameMatch || categoryMatch;
+      })
     );
   }, [products]);
 

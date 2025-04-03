@@ -1,52 +1,20 @@
 {
   "users": [
     {
-      "id": "b06e",
-      "username": "Lahl",
-      "email": "somekaart@gmail.com",
-      "password": "546789123"
-    },
-    {
-      "id": "782e",
-      "username": "Lahl",
-      "email": "eefefef@gmail.com",
-      "password": "546789123"
-    },
-    {
-      "id": "eac2",
-      "username": "Lahl",
-      "email": "eehfttffefef@gmail.com",
-      "password": "546789123"
-    },
-    {
-      "id": "7c49",
-      "username": "sdfdskfdskff",
-      "email": "eefesfsffef@gmail.com",
-      "password": "546789123"
-    },
-    {
-      "id": "8da8",
-      "username": "sjkfjdsklfdksl",
-      "email": "fanac@fan",
-      "password": "123456789"
-    },
-    {
-      "id": "f4c0",
-      "username": "usersd",
-      "email": "sdfdd@dfdfs",
-      "password": "123456789"
-    },
-    {
       "id": "1cbc",
       "username": "user",
       "email": "user@gmail.com",
-      "password": "123456789"
+      "password": "123456789",
+      "blocked": false,
+      "deleted": true
     },
     {
       "id": "67c6",
       "username": "user2",
       "email": "user2@gmail.com",
       "password": "123456789",
+      "blocked": false,
+      "deleted": false,
       "wishlist": [
         {
           "id": 7,
@@ -104,6 +72,8 @@
       "username": "user",
       "email": "user3@gmail.com",
       "password": "123456789",
+      "blocked": false,
+      "deleted": false,
       "wishlist": [
         {
           "id": 2,
@@ -137,8 +107,33 @@
       "username": "user4",
       "email": "user4@gmail.com",
       "password": "12345678",
+      "blocked": false,
+      "deleted": false,
       "wishlist": [],
       "cart": []
+    },
+    {
+      "id": "5892",
+      "username": "jomy",
+      "email": "jomy@gmail.com",
+      "password": "12345678",
+      "wishlist": [],
+      "cart": [
+        {
+          "id": 1,
+          "name": "Swigge-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 479,
+          "old_price": 450,
+          "img": [
+            "images/burger20.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4.8,
+          "isDeleted": false,
+          "category": "Burgers"
+        }
+      ]
     }
   ],
   "admin": [
@@ -157,91 +152,119 @@
       "products": [
         {
           "id": 1,
-          "name": "Classic Cheeseburger",
-          "old_price": 220,
-          "new_price": 199,
-          "offer": "10% Off",
+          "name": "Swigge-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 479,
+          "old_price": 450,
+          "img": [
+            "images/burger20.jpg"
+          ],
           "type": "Non-Veg",
-          "rating": 4.5,
-          "description": "A juicy beef patty with melted cheddar cheese, fresh lettuce, tomato, and onions in a soft burger bun.",
-          "img": "images/burger-12.jpg"
+          "rating": 4.8,
+          "isDeleted": false
         },
         {
           "id": 2,
-          "name": "Paneer Tikka Burger",
-          "old_price": 210,
-          "new_price": 179,
-          "offer": "15% Off",
-          "type": "Veg",
-          "rating": 4.4,
-          "description": "Grilled paneer tikka with mint chutney, onions, and fresh tomato in a whole wheat bun.",
-          "img": "images/burger-13.jpg"
+          "name": "Swigge-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 499,
+          "old_price": 450,
+          "img": [
+            "images/burger20.jpg"
+          ],
+          "type": "",
+          "rating": 4.8
         },
         {
           "id": 3,
-          "name": "Peri Peri Chicken Burger",
-          "old_price": 295,
-          "new_price": 259,
-          "offer": "12% Off",
-          "type": "Non-Veg",
-          "rating": 4.6,
-          "description": "Fiery peri peri chicken fillet with spicy mayo, lettuce, and onions in a toasted bun.",
-          "img": "images/burger-15.jpg"
+          "name": "Shawarma",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 698,
+          "old_price": 689,
+          "img": [
+            "images/burger20.jpg"
+          ],
+          "type": "",
+          "rating": 4
         },
         {
           "id": 4,
-          "name": "BBQ Bacon Burger",
-          "old_price": 340,
-          "new_price": 279,
-          "offer": "18% Off",
-          "type": "Non-Veg",
-          "rating": 4.7,
-          "description": "Smoky bacon, BBQ sauce, crispy onions, and melted cheese on a juicy beef patty.",
-          "img": "images/burger-16.jpg"
+          "description": "",
+          "type": "",
+          "rating": 0,
+          "category": "Burgers"
         },
         {
           "id": 5,
-          "name": "Crispy Veggie Burger",
-          "old_price": 175,
-          "new_price": 159,
-          "offer": "8% Off",
-          "type": "Veg",
-          "rating": 4.2,
-          "description": "Crispy vegetable patty with lettuce, tomato, and tangy mayo in a soft sesame bun.",
-          "img": "images/burger-17.jpg"
+          "description": "",
+          "type": "",
+          "rating": 0,
+          "category": "Burgers"
         },
         {
           "id": 6,
-          "name": "Spicy Mexican Burger",
-          "old_price": 265,
-          "new_price": 229,
-          "offer": "14% Off",
-          "type": "Non-Veg",
-          "rating": 4.6,
-          "description": "Spiced beef patty with jalapeños, nacho chips, spicy salsa, and cheddar cheese.",
-          "img": "images/burger-18.jpg"
+          "description": "",
+          "type": "",
+          "rating": 0,
+          "category": "Burgers"
         },
         {
           "id": 7,
-          "name": "Mushroom Swiss Burger",
-          "old_price": 275,
-          "new_price": 249,
-          "offer": "10% Off",
-          "type": "Non-Veg",
-          "rating": 4.5,
-          "description": "Juicy beef patty with sautéed mushrooms and melted Swiss cheese in a toasted bun.",
-          "img": "images/burgers19.jpg"
+          "description": "",
+          "type": "",
+          "rating": 0,
+          "category": "Burgers"
         },
         {
           "id": 8,
-          "name": "Aloo Tikki Burger",
-          "old_price": 186,
-          "new_price": 149,
-          "offer": "20% Off",
-          "type": "Veg",
-          "rating": 4.3,
-          "description": "Classic Indian-style aloo tikki with tangy tamarind chutney and fresh veggies.",
-          "img": "images/burger20.jpg"
+          "description": "",
+          "type": "",
+          "rating": 0,
+          "category": "Burgers"
+        },
+        {
+          "id": "05e33586-75ac-436c-8578-7a8813777d16",
+          "title": "Shawarma",
+          "price": "120",
+          "images": "images/shawarma.avif",
+          "description": "",
+          "type": "",
+          "rating": 0,
+          "category": "Burgers"
+        },
+        {
+          "id": "84b84898-d36b-4977-8c85-fb3999b19cbc",
+          "title": "Shawarma",
+          "price": "120",
+          "images": "images/shawarma.avif",
+          "description": "",
+          "type": "",
+          "rating": 0,
+          "category": "Burgers"
+        },
+        {
+          "id": "073815b8-af93-463f-8a96-4e3d4e531c70",
+          "title": "Shawarma",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "price": "120",
+          "offerPrice": "100",
+          "images": "images/shawarma.avif",
+          "type": "",
+          "rating": "4.8",
+          "category": "Burgers",
+          "categoryId": "561e"
+        },
+        {
+          "id": "d19051e2-498f-4d0e-af04-63a0bfe2f37b",
+          "name": "Grilled Salmon",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 789,
+          "old_price": 700,
+          "img": [
+            "images/burger20.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4
         }
       ],
       "id": "561e"
@@ -251,34 +274,15 @@
       "img": "images/OIP.jpeg",
       "products": [
         {
-          "id": 4,
-          "name": "Margherita Pizza",
-          "new_price": 299,
-          "type": "Veg",
-          "fresh": true,
-          "rating": 4.7,
-          "description": "Classic Margherita pizza with fresh basil, mozzarella cheese, and a tangy tomato sauce base.",
-          "img": "images/pizza.jpeg"
-        },
-        {
-          "id": 5,
-          "name": "Pepperoni Pizza",
-          "new_price": 349,
+          "id": "a0df1a81-5fcc-4de5-97ae-08cdeee429b9",
+          "title": "Shawarma",
+          "price": "120",
+          "offerPrice": "100",
+          "images": "images/burger20.jpg",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
           "type": "Non-Veg",
-          "fresh": true,
-          "rating": 4.8,
-          "description": "Spicy pepperoni slices layered over gooey mozzarella and a crispy crust.",
-          "img": "images/pizza.jpeg"
-        },
-        {
-          "id": 6,
-          "name": "BBQ Chicken Pizza",
-          "new_price": 369,
-          "type": "Non-Veg",
-          "fresh": true,
-          "rating": 4.6,
-          "description": "BBQ chicken with onions, jalapeños, and a smoky BBQ sauce drizzle on a crispy thin crust.",
-          "img": "images/pizza.jpeg"
+          "rating": "4.8",
+          "category": "Pizza"
         }
       ],
       "id": "3d3e"
@@ -289,33 +293,36 @@
       "products": [
         {
           "id": 7,
-          "name": "Chocolate Brownie",
-          "new_price": 149,
-          "type": "Veg",
-          "fresh": true,
-          "rating": 4.7,
+          "title": "Chocolate Brownie",
+          "price": 149,
+          "images": "images/burger20.jpg",
           "description": "Rich and fudgy chocolate brownie served warm with a scoop of vanilla ice cream.",
-          "img": "images/desearts.jpeg"
+          "type": "Veg",
+          "rating": 4.7,
+          "category": "Desserts"
         },
         {
           "id": 8,
-          "name": "Strawberry Cheesecake",
-          "new_price": 249,
-          "type": "Veg",
-          "fresh": true,
-          "rating": 4.8,
+          "title": "Strawberry Cheesecake",
+          "price": 249,
+          "images": "images/desearts.jpeg",
           "description": "Creamy cheesecake topped with fresh strawberry sauce and whipped cream.",
-          "img": "images/desearts.jpeg"
+          "type": "Veg",
+          "rating": 4.8,
+          "category": "Desserts"
         },
         {
           "id": 9,
-          "name": "Tiramisu",
-          "new_price": 269,
-          "type": "Veg",
-          "fresh": true,
-          "rating": 4.9,
+          "title": "Shawarma",
+          "price": 120,
+          "offerPrice": 100,
+          "images": [
+            "images/burger19.jpg"
+          ],
           "description": "Italian coffee-flavored dessert with layers of mascarpone and cocoa powder.",
-          "img": "images/desearts.jpeg"
+          "type": "Veg",
+          "rating": 4.9,
+          "category": "Desserts"
         }
       ],
       "id": "9f31"
@@ -326,33 +333,62 @@
       "products": [
         {
           "id": 10,
-          "name": "Alfredo Pasta",
-          "new_price": 299,
-          "type": "Veg",
-          "fresh": true,
-          "rating": 4.5,
+          "title": "Alfredo Pasta",
+          "price": 299,
+          "offerPrice": 230,
+          "images": [
+            "images/pastaa.jpeg"
+          ],
           "description": "Creamy Alfredo sauce with fettuccine pasta and parmesan cheese.",
-          "img": "images/pastaa.jpeg"
+          "type": "Veg",
+          "rating": 4.5,
+          "category": "Pasta"
         },
         {
           "id": 11,
-          "name": "Penne Arrabbiata",
-          "new_price": 249,
-          "type": "Veg",
-          "fresh": true,
-          "rating": 4.4,
+          "title": "Penne Arrabbiata",
+          "price": 249,
+          "images": "images/pastaa.jpeg",
           "description": "Spicy red sauce pasta with garlic, chili flakes, and fresh basil.",
-          "img": "images/pastaa.jpeg"
+          "type": "Veg",
+          "rating": 4.4,
+          "category": "Pasta"
         },
         {
           "id": 12,
-          "name": "Chicken Pesto Pasta",
-          "new_price": 329,
-          "type": "Non-Veg",
-          "fresh": true,
-          "rating": 4.6,
+          "title": "Chicken Pesto Pasta",
+          "price": 329,
+          "images": "images/pastaa.jpeg",
           "description": "Grilled chicken tossed in basil pesto sauce with linguine pasta.",
-          "img": "images/pastaa.jpeg"
+          "type": "Non-Veg",
+          "rating": 4.6,
+          "category": "Pasta"
+        },
+        {
+          "id": "b33eab4e-03bd-497f-a293-47afa2c0095d",
+          "title": "Alfredo Pasta",
+          "description": "Creamy Alfredo sauce with fettuccine pasta and parmesan cheese.",
+          "price": 299,
+          "offerPrice": 230,
+          "images": [
+            "images/pastaa.jpeg"
+          ],
+          "type": "",
+          "rating": 4.5,
+          "category": "Pasta",
+          "categoryId": "ead0"
+        },
+        {
+          "id": "d9e3af4f-a493-4698-93ca-9b798c2d6473",
+          "name": "Grilled Salmon",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 566,
+          "old_price": 543,
+          "img": [
+            "images/shawarma.avif"
+          ],
+          "type": "Non-Veg",
+          "rating": 4.5
         }
       ],
       "id": "ead0"
@@ -363,23 +399,37 @@
       "products": [
         {
           "id": 13,
-          "name": "Mango Smoothie",
-          "new_price": 179,
-          "type": "Veg",
-          "fresh": true,
-          "rating": 4.5,
+          "title": "Mango Smoothie",
+          "price": 179,
+          "images": "images/drinkss.jpeg",
           "description": "Refreshing mango smoothie made with fresh mango pulp and yogurt.",
-          "img": "images/drinkss.jpeg"
+          "type": "Veg",
+          "rating": 4.5,
+          "category": "Drinks"
         },
         {
           "id": 14,
-          "name": "Lemon Iced Tea",
-          "new_price": 129,
-          "type": "Veg",
-          "fresh": true,
-          "rating": 4.3,
+          "title": "Lemon Iced Tea",
+          "price": 129,
+          "images": "images/drinkss.jpeg",
           "description": "Chilled lemon-infused iced tea with a hint of mint.",
-          "img": "images/drinkss.jpeg"
+          "type": "Veg",
+          "rating": 4.3,
+          "category": "Drinks"
+        },
+        {
+          "id": "8da4fd17-aa65-4e9d-958a-9567e2a19824",
+          "title": "Alfredo Pasta",
+          "description": "Creamy Alfredo sauce with fettuccine pasta and parmesan cheese.",
+          "price": 299,
+          "offerPrice": 230,
+          "images": [
+            "images/pastaa.jpeg"
+          ],
+          "type": "",
+          "rating": 4.5,
+          "category": "Drinks",
+          "categoryId": "9f78"
         }
       ],
       "id": "9f78"
@@ -388,16 +438,6 @@
       "name": "Seafood",
       "img": "images/seafood.jpeg",
       "products": [
-        {
-          "id": 16,
-          "name": "Grilled Salmon",
-          "new_price": 499,
-          "type": "Non-Veg",
-          "fresh": true,
-          "rating": 4.8,
-          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
-          "img": "images/seafoodss.jpeg"
-        },
         {
           "id": 17,
           "name": "Prawn Tempura",
@@ -417,6 +457,21 @@
           "rating": 4.9,
           "description": "Lobster baked in a creamy cheese sauce with herbs and white wine.",
           "img": "images/seafoodss.jpeg"
+        },
+        {
+          "id": "10f7a6d8-5a14-4897-90d8-028376806ca0",
+          "title": "Alfredo Pasta",
+          "description": "Creamy Alfredo sauce with fettuccine pasta and parmesan cheese.",
+          "price": 299,
+          "offerPrice": 230,
+          "images": [
+            "images/pastaa.jpeg"
+          ],
+          "type": "",
+          "rating": 4.5,
+          "category": "Seafood",
+          "categoryId": "ea9d",
+          "isDeleted": false
         }
       ],
       "id": "ea9d"
@@ -653,6 +708,32 @@
       ],
       "totalPrice": 199,
       "date": "2025-03-29T14:32:16.672Z"
+    },
+    {
+      "id": "4fa7",
+      "userId": "5892",
+      "username": "jomy",
+      "email": "jomy@gmail.com",
+      "address": "123, Street Name, City",
+      "products": [
+        {
+          "id": 1,
+          "name": "Swigge-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 479,
+          "old_price": 450,
+          "img": [
+            "images/burger20.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4.8,
+          "isDeleted": false,
+          "category": "Burgers",
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 479,
+      "date": "2025-04-03T14:17:44.187Z"
     }
   ]
 }
