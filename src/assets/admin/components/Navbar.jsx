@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaBars, FaTimes, FaShoppingCart, FaClipboardList, FaCog, FaUser, FaUsers, FaKey, FaSearch } from "react-icons/fa";
 
-const Navbar = ({ toggleSidebar }) => {
+const Navbar = ({ toggleSidebar, onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    onSearch(value); // Pass the search term up to the parent
+  };
+
   return (
     <nav className="flex justify-between items-center p-4 shadow-md bg-gray-900 text-white">
       {/* Sidebar Toggle Button */}
@@ -19,8 +27,10 @@ const Navbar = ({ toggleSidebar }) => {
         <div className="relative w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl">
           <input 
             type="text" 
-            placeholder="Search..." 
-            className="bg-gray-800 text-white px-3 py-1 rounded-lg w-full focus:outline-none"
+            placeholder="Search products..." 
+            className="bg-gray-800 text-white px-3 py-1 rounded-lg w-full focus:outline-none border border-gray-700"
+            value={searchTerm}
+            onChange={handleSearch}
           />
           <FaSearch className="absolute right-3 top-2 text-gray-400" />
         </div>

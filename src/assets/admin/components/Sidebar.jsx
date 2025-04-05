@@ -6,8 +6,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [productsOpen, setProductsOpen] = useState(false);
 
   const menuItems = [
+    { name: "Admin Panel", icon: FaKey, path: "/admin-dashboard" },
     { name: "Orders", icon: FaClipboardList, path: "/admin-orders" },
-    { name: "Clothing", icon: FaTshirt, path: "/categories" },
     {
       name: "Products",
       icon: FaBox,
@@ -16,11 +16,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         { name: "Deleted Products", icon: FaPlus, path: "/admin-deletedProducts" }
       ]
     },
-    { name: "Cart", icon: FaShoppingCart, path: "/cart" },
-    { name: "Settings", icon: FaCog, path: "/settings" },
-    { name: "Profile", icon: FaUser, path: "/profile" },
+    { name: "Profile", icon: FaUser, path: "/admin-Profile" },
     { name: "Users", icon: FaUsers, path: "/admin-customers" },
-    { name: "Admin Panel", icon: FaKey, path: "/admin-dashboard" }
+    
   ];
 
   return (

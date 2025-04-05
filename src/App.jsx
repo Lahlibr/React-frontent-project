@@ -13,18 +13,21 @@ import { UserProvider }  from "./assets/components/UserProvider";
 import AdminLogin from "./assets/admin/components/AdminLogin";
 import ProtectedRoute from "./assets/admin/ProtectedRoute";
 import AdminDashboard from "./assets/admin/adminHome/Section";
+import AdminProfile from "./assets/admin/adminHome/Profile";
 import OrderPage from "./assets/admin/orders/orders";
 import ProductsPage from "./assets/admin/products/ProductsPage";
 import ProductForm from "./assets/admin/products/ProductForm";
 import DeletedProductsPage from "./assets/admin/products/DeletedProducts";
 import ProductProvider from './assets/components/ProductContext'
 import CustomerDashboard from './assets/admin/customers/customers'
-
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
     <UserProvider>
       <ProductProvider>
       <BrowserRouter>
+      <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
           {/* User Routes */}
           <Route path="/" element={<Home />} />
@@ -46,6 +49,7 @@ function App() {
           <Route path="/admin-addProducts" element={<ProtectedRoute><ProductForm /></ProtectedRoute>}/>
           <Route path="/admin-customers" element={<ProtectedRoute><CustomerDashboard /></ProtectedRoute>}/>
           <Route path="/admin-deletedProducts" element={<ProtectedRoute><DeletedProductsPage /></ProtectedRoute>}/>
+          <Route path="/admin-Profile" element={<ProtectedRoute><AdminProfile /></ProtectedRoute>}/>
         </Routes>
       </BrowserRouter>
       </ProductProvider>

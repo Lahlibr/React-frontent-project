@@ -13,7 +13,7 @@
       "username": "user2",
       "email": "user2@gmail.com",
       "password": "123456789",
-      "blocked": false,
+      "blocked": true,
       "deleted": false,
       "wishlist": [
         {
@@ -117,23 +117,37 @@
       "username": "jomy",
       "email": "jomy@gmail.com",
       "password": "12345678",
-      "wishlist": [],
-      "cart": [
+      "wishlist": [
         {
           "id": 1,
           "name": "Swigge-Burgers",
           "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
-          "new_price": 479,
+          "new_price": 469,
           "old_price": 450,
           "img": [
-            "images/burger20.jpg"
+            "images/burgers19.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4.8,
+          "isDeleted": false,
+          "category": "Burgers"
+        },
+        {
+          "id": 2,
+          "name": "Swigge-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 499,
+          "old_price": 450,
+          "img": [
+            "images/burger-12.jpg"
           ],
           "type": "Non-Veg",
           "rating": 4.8,
           "isDeleted": false,
           "category": "Burgers"
         }
-      ]
+      ],
+      "cart": []
     }
   ],
   "admin": [
@@ -154,10 +168,10 @@
           "id": 1,
           "name": "Swigge-Burgers",
           "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
-          "new_price": 479,
+          "new_price": 469,
           "old_price": 450,
           "img": [
-            "images/burger20.jpg"
+            "images/burgers19.jpg"
           ],
           "type": "Non-Veg",
           "rating": 4.8,
@@ -170,10 +184,11 @@
           "new_price": 499,
           "old_price": 450,
           "img": [
-            "images/burger20.jpg"
+            "images/burger-12.jpg"
           ],
-          "type": "",
-          "rating": 4.8
+          "type": "Non-Veg",
+          "rating": 4.8,
+          "isDeleted": false
         },
         {
           "id": 3,
@@ -182,77 +197,115 @@
           "new_price": 698,
           "old_price": 689,
           "img": [
-            "images/burger20.jpg"
+            "images/burger-13.jpg"
           ],
-          "type": "",
-          "rating": 4
+          "type": "Non-Veg",
+          "rating": 4,
+          "isDeleted": false
         },
         {
           "id": 4,
-          "description": "",
-          "type": "",
-          "rating": 0,
-          "category": "Burgers"
+          "name": "Swigge-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 689,
+          "old_price": 700,
+          "img": [
+            "images/burger-15.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4,
+          "isDeleted": false
         },
         {
           "id": 5,
-          "description": "",
-          "type": "",
-          "rating": 0,
-          "category": "Burgers"
+          "name": "Swigge-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 689,
+          "old_price": 700,
+          "img": [
+            "images/burger-15.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4,
+          "isDeleted": false
         },
         {
           "id": 6,
-          "description": "",
-          "type": "",
-          "rating": 0,
-          "category": "Burgers"
+          "name": "Doublecheese-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 720,
+          "old_price": 760,
+          "img": [
+            "images/burger-18.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4,
+          "isDeleted": false
         },
         {
           "id": 7,
-          "description": "",
-          "type": "",
-          "rating": 0,
-          "category": "Burgers"
+          "name": "Yummy-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 689,
+          "old_price": 700,
+          "img": [
+            "images/burger-17.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4,
+          "isDeleted": false
         },
         {
           "id": 8,
-          "description": "",
-          "type": "",
-          "rating": 0,
-          "category": "Burgers"
+          "name": "grilledcheese-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 720,
+          "old_price": 760,
+          "img": [
+            "images/burger-18.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4,
+          "isDeleted": false
         },
         {
           "id": "05e33586-75ac-436c-8578-7a8813777d16",
-          "title": "Shawarma",
-          "price": "120",
-          "images": "images/shawarma.avif",
-          "description": "",
-          "type": "",
-          "rating": 0,
-          "category": "Burgers"
+          "name": "gravycheese-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 720,
+          "old_price": 760,
+          "img": [
+            "images/burger-14.jpg"
+          ],
+          "type": "Veg",
+          "rating": 4,
+          "isDeleted": false
         },
         {
           "id": "84b84898-d36b-4977-8c85-fb3999b19cbc",
-          "title": "Shawarma",
-          "price": "120",
-          "images": "images/shawarma.avif",
-          "description": "",
-          "type": "",
-          "rating": 0,
-          "category": "Burgers"
+          "name": "grilledChiken-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 720,
+          "old_price": 760,
+          "img": [
+            "images/burger-18.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4,
+          "isDeleted": false
         },
         {
           "id": "073815b8-af93-463f-8a96-4e3d4e531c70",
-          "title": "Shawarma",
+          "name": "Swigge-Burgers",
           "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
-          "price": "120",
-          "offerPrice": "100",
-          "images": "images/shawarma.avif",
-          "type": "",
-          "rating": "4.8",
-          "category": "Burgers",
-          "categoryId": "561e"
+          "new_price": 344,
+          "old_price": 367,
+          "img": [
+            "images/burger20.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4.8,
+          "isDeleted": false
         },
         {
           "id": "d19051e2-498f-4d0e-af04-63a0bfe2f37b",
@@ -275,14 +328,16 @@
       "products": [
         {
           "id": "a0df1a81-5fcc-4de5-97ae-08cdeee429b9",
-          "title": "Shawarma",
-          "price": "120",
-          "offerPrice": "100",
-          "images": "images/burger20.jpg",
+          "name": "Pastagriled",
           "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 450,
+          "old_price": 500,
+          "img": [
+            "images/Pasta.jpeg"
+          ],
           "type": "Non-Veg",
-          "rating": "4.8",
-          "category": "Pizza"
+          "rating": 4.8,
+          "isDeleted": false
         }
       ],
       "id": "3d3e"
@@ -299,7 +354,8 @@
           "description": "Rich and fudgy chocolate brownie served warm with a scoop of vanilla ice cream.",
           "type": "Veg",
           "rating": 4.7,
-          "category": "Desserts"
+          "category": "Desserts",
+          "isDeleted": true
         },
         {
           "id": 8,
@@ -309,20 +365,21 @@
           "description": "Creamy cheesecake topped with fresh strawberry sauce and whipped cream.",
           "type": "Veg",
           "rating": 4.8,
-          "category": "Desserts"
+          "category": "Desserts",
+          "isDeleted": true
         },
         {
           "id": 9,
-          "title": "Shawarma",
-          "price": 120,
-          "offerPrice": 100,
-          "images": [
-            "images/burger19.jpg"
-          ],
+          "name": "Desserts",
           "description": "Italian coffee-flavored dessert with layers of mascarpone and cocoa powder.",
+          "new_price": 455,
+          "old_price": 470,
+          "img": [
+            "images/desearts.jpeg"
+          ],
           "type": "Veg",
           "rating": 4.9,
-          "category": "Desserts"
+          "isDeleted": false
         }
       ],
       "id": "9f31"
@@ -333,16 +390,16 @@
       "products": [
         {
           "id": 10,
-          "title": "Alfredo Pasta",
-          "price": 299,
-          "offerPrice": 230,
-          "images": [
+          "name": "YummyPasta",
+          "description": "Creamy Alfredo sauce with fettuccine pasta and parmesan cheese.",
+          "new_price": 899,
+          "old_price": 950,
+          "img": [
             "images/pastaa.jpeg"
           ],
-          "description": "Creamy Alfredo sauce with fettuccine pasta and parmesan cheese.",
           "type": "Veg",
           "rating": 4.5,
-          "category": "Pasta"
+          "isDeleted": false
         },
         {
           "id": 11,
@@ -352,7 +409,8 @@
           "description": "Spicy red sauce pasta with garlic, chili flakes, and fresh basil.",
           "type": "Veg",
           "rating": 4.4,
-          "category": "Pasta"
+          "category": "Pasta",
+          "isDeleted": true
         },
         {
           "id": 12,
@@ -362,7 +420,8 @@
           "description": "Grilled chicken tossed in basil pesto sauce with linguine pasta.",
           "type": "Non-Veg",
           "rating": 4.6,
-          "category": "Pasta"
+          "category": "Pasta",
+          "isDeleted": true
         },
         {
           "id": "b33eab4e-03bd-497f-a293-47afa2c0095d",
@@ -376,7 +435,8 @@
           "type": "",
           "rating": 4.5,
           "category": "Pasta",
-          "categoryId": "ead0"
+          "categoryId": "ead0",
+          "isDeleted": true
         },
         {
           "id": "d9e3af4f-a493-4698-93ca-9b798c2d6473",
@@ -405,7 +465,8 @@
           "description": "Refreshing mango smoothie made with fresh mango pulp and yogurt.",
           "type": "Veg",
           "rating": 4.5,
-          "category": "Drinks"
+          "category": "Drinks",
+          "isDeleted": true
         },
         {
           "id": 14,
@@ -415,7 +476,8 @@
           "description": "Chilled lemon-infused iced tea with a hint of mint.",
           "type": "Veg",
           "rating": 4.3,
-          "category": "Drinks"
+          "category": "Drinks",
+          "isDeleted": true
         },
         {
           "id": "8da4fd17-aa65-4e9d-958a-9567e2a19824",
@@ -429,7 +491,8 @@
           "type": "",
           "rating": 4.5,
           "category": "Drinks",
-          "categoryId": "9f78"
+          "categoryId": "9f78",
+          "isDeleted": true
         }
       ],
       "id": "9f78"
@@ -471,6 +534,19 @@
           "rating": 4.5,
           "category": "Seafood",
           "categoryId": "ea9d",
+          "isDeleted": true
+        },
+        {
+          "id": "7fcd5e4a-d810-488b-aa78-11998b16785d",
+          "name": "Shawaya",
+          "description": "Creamy Alfredo sauce with fettuccine pasta and parmesan cheese.",
+          "new_price": 450,
+          "old_price": 500,
+          "img": [
+            "images/shawaya.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4.8,
           "isDeleted": false
         }
       ],
@@ -734,6 +810,59 @@
       ],
       "totalPrice": 479,
       "date": "2025-04-03T14:17:44.187Z"
+    },
+    {
+      "id": "4a4e",
+      "userId": "5892",
+      "username": "jomy",
+      "email": "jomy@gmail.com",
+      "address": "123, Street Name, City",
+      "products": [
+        {
+          "id": 1,
+          "name": "Swigge-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 479,
+          "old_price": 450,
+          "img": [
+            "images/burger20.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4.8,
+          "isDeleted": false,
+          "category": "Burgers",
+          "quantity": 1
+        },
+        {
+          "id": 2,
+          "name": "Swigge-Burgers",
+          "price": 499,
+          "img": [
+            "images/burger-12.jpg"
+          ],
+          "quantity": 1
+        },
+        {
+          "id": 3,
+          "name": "Shawarma",
+          "price": 698,
+          "img": [
+            "images/burger-13.jpg"
+          ],
+          "quantity": 1
+        },
+        {
+          "id": 6,
+          "name": "Doublecheese-Burgers",
+          "price": 720,
+          "img": [
+            "images/burger-18.jpg"
+          ],
+          "quantity": 1
+        }
+      ],
+      "totalPrice": null,
+      "date": "2025-04-04T10:28:28.379Z"
     }
   ]
 }

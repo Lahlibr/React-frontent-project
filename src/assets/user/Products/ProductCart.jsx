@@ -37,7 +37,7 @@ const ProductCard = () => {
   const handleAddToCart = useCallback((product, e) => {
     e.stopPropagation();
     
-    // Create a consistent cart item structure
+   
     const cartItem = {
       id: product.id,
       name: product.name,

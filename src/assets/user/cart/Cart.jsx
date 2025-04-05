@@ -14,13 +14,13 @@ const CartPage = () => {
     const loadCart = () => {
       try {
         if (user) {
-          // Fetch from API for logged-in users
+          
           axios.get(`http://localhost:3001/users/${user.id}`)
             .then((response) => {
               const userCart = response.data.cart || [];
               setCart(userCart.map(item => ({
                 ...item,
-                quantity: item.quantity || 1 // Normalize quantity
+                quantity: item.quantity || 1 
               })));
             });
         } else {
@@ -28,7 +28,7 @@ const CartPage = () => {
           const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
           setCart(guestCart.map(item => ({
             ...item,
-            quantity: item.quantity || 1 // Normalize quantity
+            quantity: item.quantity || 1
           })));
         }
       } catch (error) {
@@ -40,7 +40,7 @@ const CartPage = () => {
     loadCart();
   }, [user]);
 
-  // Update cart in storage (API for users, localStorage for guests)
+  
   const updateCart = async (updatedCart) => {
     try {
       // Ensure all items have quantity

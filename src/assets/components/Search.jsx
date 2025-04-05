@@ -16,13 +16,13 @@ const SearchComponent = () => {
         setProducts(categories.flatMap((category) =>
           category.products.map((product) => ({ 
             ...product, 
-            category: category.name || 'uncategorized' // Add fallback
+            category: category.name || 'uncategorized' 
           }))
         )))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  // Debounced search function to optimize filtering
+  
   const handleSearch = useCallback((query) => {
     if (!query) {
       setSearchResults([]);

@@ -14,18 +14,15 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch data from db.json
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        // Fetch the db.json file
         const response = await fetch('/db.json');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
-        
         const jsonData = await response.json();
         setData(jsonData);
         setLoading(false);
@@ -34,11 +31,10 @@ const AdminDashboard = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  // Calculate metrics based on data
+  
   const totalUsers = data.users ? data.users.length : 0;
   const activeUsers = data.users ? data.users.filter(user => !user.deleted && !user.blocked).length : 0;
   const deletedUsers = data.users ? data.users.filter(user => user.deleted).length : 0;
@@ -47,10 +43,10 @@ const AdminDashboard = () => {
   const totalOrders = data.orders ? data.orders.length : 0;
   const totalRevenue = data.orders ? data.orders.reduce((sum, order) => sum + order.totalPrice, 0) : 0;
   
-  // Extract products from all categories
+  
   const allProducts = data.categories ? data.categories.flatMap(category => category.products || []) : [];
   
-  // Sort products by rating to find trending products
+  
   const trendingProducts = [...allProducts].sort((a, b) => b.rating - a.rating).slice(0, 5);
   
   // Prepare metrics for display

@@ -1,89 +1,149 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { ProductContext } from "../../components/ProductContext";
 import axios from "axios";
+import Sidebar from "../components/Sidebar"
+import Navbar from "../components/Navbar"
+import { toast } from "react-toastify";
 
 const DeletedProductsPage = () => {
   const { categories, refreshCategories } = useContext(ProductContext);
   const [deletedProducts, setDeletedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Extract all deleted products from all categories
-    const allDeletedProducts = categories.flatMap(category => 
-      category.products
-        .filter(product => product.isDeleted)
-        .map(product => ({
-          ...product,
-          categoryId: category.id,
-          categoryName: category.name
-        }))
-    );
-    
-    setDeletedProducts(allDeletedProducts);
+    const fetchDeletedProducts = () => {
+      try {
+        const allDeletedProducts = categories.flatMap(category => 
+          category.products
+            .filter(product => product.isDeleted)
+            .map(product => ({
+              ...product,
+              categoryId: category.id,
+              categoryName: category.name,
+              productName: product.title || product.name,
+              price: product.price || product.new_price
+            }))
+        );
+        
+        setDeletedProducts(allDeletedProducts);
+      } catch (error) {
+        console.error("Error fetching deleted products:", error);
+        toast.error("Failed to load deleted products");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDeletedProducts();
   }, [categories]);
 
   const handleRestore = async (product) => {
     try {
-      // Get fresh data for the specific category
       const res = await axios.get(`http://localhost:3001/categories/${product.categoryId}`);
       const category = res.data;
       
-      // Find the product in the category
       const productIndex = category.products.findIndex(p => p.id === product.id);
       
       if (productIndex !== -1) {
-        // Set isDeleted to false
         category.products[productIndex].isDeleted = false;
         
-        // Update the category
         await axios.put(`http://localhost:3001/categories/${category.id}`, category);
         
-        // Refresh the data
         refreshCategories();
-        
-        console.log(`Product with ID ${product.id} restored successfully`);
+        toast.success(`"${product.productName}" restored successfully`);
       }
     } catch (error) {
       console.error("Error restoring product:", error);
+      toast.error("Failed to restore product");
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <div className="text-xl font-semibold text-white">Loading deleted products...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 bg-gray-900 text-white min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Deleted Products</h1>
-      
-      {deletedProducts.length === 0 ? (
-        <p className="text-gray-400">No deleted products found</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-gray-800 text-white border border-gray-700">
-            <thead>
-              <tr className="border-b border-gray-700">
-                <th className="px-6 py-3 text-left">Product</th>
-                <th className="px-6 py-3 text-left">Category</th>
-                <th className="px-6 py-3 text-left">Price</th>
-                <th className="px-6 py-3 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {deletedProducts.map((product) => (
-                <tr key={product.id} className="border-b border-gray-700">
-                  <td className="px-6 py-4">{product.title || product.name}</td>
-                  <td className="px-6 py-4">{product.categoryName}</td>
-                  <td className="px-6 py-4">${product.price || product.new_price}</td>
-                  <td className="px-6 py-4 text-center">
-                    <button
-                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md"
-                      onClick={() => handleRestore(product)}
-                    >
-                      Restore
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+    <div className="flex h-screen bg-gray-900">
+      {/* Sidebar - Fixed width and always visible on desktop */}
+      <div className={`fixed inset-y-0 z-50 w-64 bg-gray-800 text-white transition-all duration-300 ease-in-out transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}>
+        <Sidebar />
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Navbar */}
+        <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+
+        {/* Content Container */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Page Header */}
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl md:text-3xl font-bold text-white">Deleted Products</h1>
+            </div>
+
+            {/* Products Table */}
+            {deletedProducts.length === 0 ? (
+              <div className="bg-gray-800 rounded-lg p-6 text-center">
+                <p className="text-gray-400">No deleted products found</p>
+              </div>
+            ) : (
+              <div className="bg-gray-800 rounded-lg shadow overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-700">
+                    <thead className="bg-gray-700">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                          Product
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                          Category
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                          Price
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-gray-800 divide-y divide-gray-700">
+                      {deletedProducts.map((product) => (
+                        <tr key={product.id} className="hover:bg-gray-750">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-white">{product.productName}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-300">{product.categoryName}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-300">${product.price}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-center">
+                            <button
+                              onClick={() => handleRestore(product)}
+                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                            >
+                              Restore
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
