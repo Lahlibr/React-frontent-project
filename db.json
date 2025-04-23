@@ -6,7 +6,24 @@
       "email": "user@gmail.com",
       "password": "123456789",
       "blocked": false,
-      "deleted": true
+      "deleted": true,
+      "cart": [
+        {
+          "id": "84b84898-d36b-4977-8c85-fb3999b19cbc",
+          "name": "grilledChiken-Burgers",
+          "description": "Freshly grilled salmon served with garlic butter and steamed vegetables.",
+          "new_price": 720,
+          "old_price": 760,
+          "img": [
+            "images/burger-18.jpg"
+          ],
+          "type": "Non-Veg",
+          "rating": 4,
+          "isDeleted": false,
+          "category": "Burgers",
+          "quantity": 1
+        }
+      ]
     },
     {
       "id": "67c6",
