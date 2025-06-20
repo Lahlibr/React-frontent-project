@@ -40,26 +40,21 @@ const DeletedProductsPage = () => {
     fetchDeletedProducts();
   }, [categories]);
 
-  const handleRestore = async (product) => {
-    try {
-      const res = await axios.get(`http://localhost:3001/categories/${product.categoryId}`);
-      const category = res.data;
-      
-      const productIndex = category.products.findIndex(p => p.id === product.id);
-      
-      if (productIndex !== -1) {
-        category.products[productIndex].isDeleted = false;
-        
-        await axios.put(`http://localhost:3001/categories/${category.id}`, category);
-        
-        refreshCategories();
-        toast.success(`"${product.productName}" restored successfully`);
-      }
-    } catch (error) {
-      console.error("Error restoring product:", error);
-      toast.error("Failed to restore product");
-    }
-  };
+  const handlePermanentDelete = async (productId) => {
+  if (!window.confirm("Are you sure you want to permanently delete this product?")) return;
+
+  try {
+    await axios.delete(`http://localhost:5000/api/products/delete/${productId}`); // Assuming this is your API
+    toast.success("Product permanently deleted");
+
+    // Update the UI
+    setDeletedProducts(prev => prev.filter(p => p.id !== productId));
+    refreshCategories(); // Optional, if needed
+  } catch (error) {
+    console.error("Error permanently deleting product:", error);
+    toast.error("Failed to permanently delete product");
+  }
+};
 
   if (loading) {
     return (
@@ -128,11 +123,12 @@ const DeletedProductsPage = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-center">
                             <button
-                              onClick={() => handleRestore(product)}
-                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                            >
-                              Restore
-                            </button>
+  onClick={() => handlePermanentDelete(product.id)}
+  className="ml-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+>
+  Delete Permanently
+</button>
+
                           </td>
                         </tr>
                       ))}

@@ -1,58 +1,59 @@
 import React from "react";
 
-const ProductTable = ({ products, handleRemove, handleEdit }) => {
-  // Filter out soft-deleted products in the UI
-  const visibleProducts = products.filter(product => !product.isDeleted);
-
+const ProductTable = ({ products, handleEdit, handleRemove }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-gray-800 text-white border border-gray-700">
-        <thead>
-          <tr className="border-b border-gray-700">
-            <th className="px-6 py-3 text-left">Product</th>
-            <th className="px-6 py-3 text-left">Category</th>
-            <th className="px-6 py-3 text-left">Price</th>
-            <th className="px-6 py-3 text-left">Type</th>
-            <th className="px-6 py-3 text-center">Actions</th>
+    <div className="overflow-x-auto border border-gray-200 shadow-md rounded-lg mt-4">
+      <table className="min-w-full text-sm text-left bg-white">
+        <thead className="bg-gray-100 text-gray-700 font-semibold">
+          <tr>
+            <th className="px-4 py-3">ProductName</th>
+            <th className="px-4 py-3">Category</th>
+            <th className="px-4 py-3">Real Price</th>
+            <th className="px-4 py-3">Offer Price</th>
+            <th className="px-4 py-3">Type</th>
+            <th className="px-4 py-3">Rating</th>
+            <th className="px-4 py-3">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {visibleProducts.length > 0 ? (
-            visibleProducts.map((product) => (
-              <tr key={product.id} className="border-b border-gray-700">
-                <td className="px-6 py-4 flex items-center space-x-3">
-                  <img
-                    src={product.images}
-                    alt={product.title}
-                    className="w-12 h-12 object-cover rounded-md"
-                  />
-                  <span>{product.title}</span>
+          {products.length === 0 ? (
+            <tr>
+              <td colSpan="7" className="text-center py-6 text-gray-500">
+                No products found.
+              </td>
+            </tr>
+          ) : (
+            products.map((product,index) => (
+              <tr
+                key={product.id || index}
+                className="border-t border-gray-200 hover:bg-gray-50"
+              >
+                <td className="px-4 py-2">{product.productName}</td>
+                <td className="px-4 py-2">{product.category}</td>
+                <td className="px-4 py-2 text-red-500 line-through">
+                  ₹{product.price}
                 </td>
-                <td className="px-6 py-4">{product.category}</td>
-                <td className="px-6 py-4">${product.price}</td>
-                <td className="px-6 py-4">{product.type}</td>
-                <td className="px-6 py-4 text-center">
+                <td className="px-4 py-2 text-green-600 font-semibold">
+                  ₹{product.offerPrice}
+                </td>
+                <td className="px-4 py-2">{product.type}</td>
+                <td className="px-4 py-2">{product.rating}</td>
+                <td className="px-4 py-2 space-x-2">
                   <button
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md mr-2"
                     onClick={() => handleEdit(product)}
+                    className="px-3 py-1 bg-yellow-400 text-black rounded hover:bg-yellow-500"
                   >
                     Edit
                   </button>
                   <button
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
                     onClick={() => handleRemove(product.id)}
+                    className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                   >
                     Delete
                   </button>
                 </td>
               </tr>
             ))
-          ) : (
-            <tr>
-              <td colSpan="5" className="px-6 py-4 text-center">
-                No products found
-              </td>
-            </tr>
           )}
         </tbody>
       </table>

@@ -18,6 +18,9 @@ const CheckoutPage = () => {
   const [newAddress, setNewAddress] = useState("");
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const formatAddress = (addr) => {
+  return `${addr.houseName}, ${addr.landmark}, ${addr.place}, ${addr.postOffice}, ${addr.pincode}`;
+};
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user"));
@@ -59,6 +62,7 @@ const CheckoutPage = () => {
       const response = await axiosInstance.get("/Address/All", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      console.log("Fetched addresses:", response.data);
       const fetchedAddresses = response?.data?.data || [];
       setAddresses(fetchedAddresses);
       setSelectedAddress(fetchedAddresses[0] || null);
@@ -68,26 +72,34 @@ const CheckoutPage = () => {
   };
 
   const handleAddressAdd = async () => {
-    if (!newAddress.trim()) return;
-    const formData = new FormData();
-    formData.append("Address", newAddress);
-
-    try {
-      const response = await axiosInstance.post("/Address/Add", formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
-      const added = response?.data?.data;
-      if (added) {
-        setAddresses((prev) => [...prev, added]);
-        setSelectedAddress(added);
-        setNewAddress("");
-        setEditingAddress(false);
-      }
-    } catch (error) {
-      console.error("Error adding address:", error);
-    }
+  const newAddressObj = {
+    fullName: "John Doe",
+    houseName: "My House",
+    landmark: "Near Church",
+    phoneNumber: "1234567890",
+    pincode: "123456",
+    place: "Town Name",
+    postOffice: "Post Office",
   };
+
+  try {
+    const response = await axiosInstance.post("/Address/Add", newAddressObj, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const added = response?.data?.data;
+    if (added) {
+      fetchAddresses(); // re-fetch after add
+      setNewAddress(""); // if you use a form input
+    }
+  } catch (error) {
+    console.error("Error adding address:", error?.response?.data || error);
+  }
+};
+
 
   const handleAddressDelete = async (addressId) => {
     try {
@@ -176,21 +188,22 @@ const CheckoutPage = () => {
                   />
                 )}
               </div>
-              <select
-                value={selectedAddress?.id || ""}
-                onChange={(e) =>
-                  setSelectedAddress(
-                    addresses.find((a) => a.id === e.target.value)
-                  )
-                }
-                className="w-full border p-2 rounded"
-              >
-                {addresses.map((addr) => (
-                  <option key={addr.id} value={addr.id}>
-                    {addr.address}
-                  </option>
-                ))}
-              </select>
+             <select
+  value={selectedAddress?.addressId || ""}
+  onChange={(e) =>
+    setSelectedAddress(
+      addresses.find((a) => a.addressId === parseInt(e.target.value))
+    )
+  }
+  className="w-full border p-2 rounded"
+>
+  {addresses.map((addr) => (
+    <option key={addr.addressId} value={addr.addressId}>
+      {formatAddress(addr)}
+    </option>
+  ))}
+</select>
+
             </div>
 
             {editingAddress ? (

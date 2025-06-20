@@ -1,11 +1,42 @@
 import React, { useState, useEffect } from "react";
-import Modal from "./Modal";
-import axios from "axios";
 import ProductTable from "../components/ProductTable";
 import Filters from "./Filters";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import ProductForm from "./ProductForm";
+import axiosInstance from "../../components/AxiosInstance";
+import { toast } from "react-toastify";
+
+const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs bg-opacity-50">
+      <div className="bg-white p-6 rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
 
 const ProductsPage = () => {
   const [originalProducts, setOriginalProducts] = useState([]);
@@ -13,108 +44,125 @@ const ProductsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
 
-  // Fetch products on component mount
   useEffect(() => {
     fetchProducts();
   }, []);
 
   const fetchProducts = async () => {
+    setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:3001/categories");
+      console.log("Fetching products...");
+      const response = await axiosInstance.get("category/All");
+      console.log("API Response:", response.data);
+      
       const allProducts = response.data.flatMap((category) =>
         category.products.map((product) => ({
-          id: product.id,
-          title: product.name,
+          id: product.productId,
+          productName: product.productName,
           category: category.name,
-          price: product.new_price,
-          offerPrice: product.old_price,
+          price: product.realPrice,
+          offerPrice: product.offerPrice,
           type: product.type,
           rating: product.rating,
           description: product.description,
-          images: product.img,
-          isDeleted: product.isDeleted || false
+          images: product.imageUrl || [],
+          isDeleted: product.isDeleted || false,
         }))
       );
+      
+      console.log("Processed products:", allProducts);
       setOriginalProducts(allProducts);
-      setDisplayedProducts(allProducts); 
+      setDisplayedProducts(allProducts);
     } catch (error) {
       console.error("Error fetching products:", error);
+      // Add user feedback
+      alert("Failed to fetch products. Please refresh the page.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Handle search functionality
-  const handleSearch = (searchTerm) => {
-    if (!searchTerm) {
-      setDisplayedProducts(originalProducts);
-      return;
-    }
+ const handleSearch = async (searchTerm) => {
+  if (!searchTerm) {
+    setDisplayedProducts(originalProducts);
+    return;
+  }
 
-    const lowerCaseTerm = searchTerm.toLowerCase();
-    const filtered = originalProducts.filter((product) => {
-      return (
-        (product.title && product.title.toLowerCase().includes(lowerCaseTerm)) ||
-        (product.category && product.category.toLowerCase().includes(lowerCaseTerm)) 
-      );
-    });
+  try {
+    const response = await axiosInstance.get(`Product/Search/${searchTerm}`);
+    const filteredProducts = response.data.map((product) => ({
+      id: product.productId,
+      productName: product.productName,
+      category: product.categoryName || "Unknown", // Adjust as per your API response
+      price: product.realPrice,
+      offerPrice: product.offerPrice,
+      type: product.type,
+      rating: product.rating,
+      description: product.description,
+      images: product.imageUrl || [],
+      isDeleted: product.isDeleted || false,
+    }));
 
-    setDisplayedProducts(filtered);
-  };
+    setDisplayedProducts(filteredProducts);
+  } catch (error) {
+    console.error("Search failed:", error);
+    toast.error("No matching products found.");
+    setDisplayedProducts([]); // Optionally clear the UI
+  }
+};
 
-  // Handle product edit
+
   const handleEdit = (product) => {
+    console.log("Editing product:", product);
     setEditProduct(product);
     setIsModalOpen(true);
   };
 
- 
-  const closeModal = () => {
+  const closeModal = async () => {
+    console.log("Closing modal and refreshing data...");
     setEditProduct(null);
     setIsModalOpen(false);
-    fetchProducts(); // Refresh the product list
+    
+    // Add a small delay to ensure server has processed the update
+    setTimeout(() => {
+      fetchProducts();
+    }, 500);
   };
 
-  // Handle product removal (soft delete)
   const handleRemove = async (id) => {
-    try {
-      const response = await axios.get("http://localhost:3001/categories");
-      const categories = response.data;
+  try {
+    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+    if (!confirmDelete) return;
 
-      // Find the product in categories
-      let categoryToUpdate = null;
-      let productIndex = -1;
-      
-      for (const category of categories) {
-        productIndex = category.products.findIndex(p => p.id === id);
-        if (productIndex !== -1) {
-          categoryToUpdate = category;
-          break;
-        }
-      }
+    await axiosInstance.delete(`Product/Delete/${id}`); // Assuming baseURL is already set
 
-      if (categoryToUpdate && productIndex !== -1) {
-        // Update the product's isDeleted flag
-        categoryToUpdate.products[productIndex].isDeleted = true;
-        
-        // Save the updated category
-        await axios.put(
-          `http://localhost:3001/categories/${categoryToUpdate.id}`,
-          categoryToUpdate
-        );
+    console.log(`Product ${id} deleted from server`);
+    toast.success("Product deleted successfully");
 
-        // Update local state
-        setOriginalProducts(prev => 
-          prev.map(p => p.id === id ? { ...p, isDeleted: true } : p)
-        );
-        setDisplayedProducts(prev => 
-          prev.map(p => p.id === id ? { ...p, isDeleted: true } : p)
-        );
+    fetchProducts(); // Refresh product list
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    toast.error("Failed to delete product");
+  }
+};
 
-        console.log(`Product ${id} marked as deleted`);
-      }
-    } catch (error) {
-      console.error("Error deleting product:", error);
-    }
+
+  // Create a custom ProductForm wrapper that handles the close callback
+  const ProductFormWrapper = ({ editProduct, onClose }) => {
+    const handleFormClose = () => {
+      console.log("ProductForm closed, refreshing data...");
+      onClose();
+    };
+
+    return (
+      <ProductForm 
+        editProduct={editProduct} 
+        onClose={handleFormClose}
+      />
+    );
   };
 
   return (
@@ -122,41 +170,49 @@ const ProductsPage = () => {
       <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <div className="flex">
         <div
-          className={`fixed md:relative z-50 md:z-auto w-64 bg-gray-900 text-white md:block ${
+          className={`fixed md:relative z-40 w-64 bg-gray-800 text-white md:block ${
             sidebarOpen ? "translate-x-0" : "-translate-x-64"
           } transition-transform duration-300 md:translate-x-0`}
         >
-          <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+          <Sidebar
+            isOpen={sidebarOpen}
+            toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+          />
         </div>
 
-        <div className="flex-1 min-h-screen bg-gray-900 text-white p-6">
+        <div className="flex-1 min-h-screen bg-white text-black p-6">
           <div className="max-w-6xl mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-3xl font-semibold">Products</h1>
-              <button 
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:opacity-50"
                 onClick={() => setIsModalOpen(true)}
+                disabled={isLoading}
               >
                 + Add Product
               </button>
             </div>
 
-            {/* Pass the search handler to Filters */}
             <Filters onSearch={handleSearch} />
 
-            {/* Show the filtered products */}
-            <ProductTable 
-              products={displayedProducts.filter(p => !p.isDeleted)} 
-              handleRemove={handleRemove} 
-              handleEdit={handleEdit} 
-            />
+            {isLoading ? (
+              <div className="text-center py-8">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p className="mt-2 text-gray-600">Loading products...</p>
+              </div>
+            ) : (
+              <ProductTable
+                products={displayedProducts.filter((p) => !p.isDeleted)}
+                handleRemove={handleRemove}
+                handleEdit={handleEdit}
+              />
+            )}
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-              {editProduct ? (
-                <ProductForm editProduct={editProduct} onClose={closeModal} />
-              ) : (
-                <ProductForm onClose={closeModal} />
-              )}
+              <ProductFormWrapper
+                editProduct={editProduct}
+                onClose={closeModal}
+              />
             </Modal>
           </div>
         </div>
