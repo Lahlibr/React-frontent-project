@@ -1,10 +1,10 @@
 // pages/ProductListing.jsx
 import React, { useState, useEffect, memo } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import ProductCard from "./ProductCard";
 import NavItems from "../components/NavItems";
 import Footer from "../components/Footer";
+import axiosInstance from "../../components/AxiosInstance";
 
 const ProductListing = memo(() => {
   const [products, setProducts] = useState([]);
@@ -15,9 +15,9 @@ const ProductListing = memo(() => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3001/catego"); // Ensure the correct URL
+        const { data } = await axiosInstance.get("/Product/All"); // Ensure the correct URL
         console.log("Fetched Data:", data); // Debugging
-  
+        
         const allProducts = data.categories.flatMap(c => 
           c.products.map(p => ({ ...p, category: c.name }))
         );

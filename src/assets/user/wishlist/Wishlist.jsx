@@ -1,11 +1,11 @@
 import React, { useState, useEffect, memo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Heart, Trash, Menu } from "lucide-react";
-import { categories } from "../categories/Categories";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axiosInstance from "../../components/AxiosInstance";
 
 const WishlistPage = memo(() => {
   const navigate = useNavigate();
@@ -13,6 +13,12 @@ const WishlistPage = memo(() => {
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")));
   const [wishlist, setWishlist] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
+  const categories = [
+  { name: "Electronics" },
+  { name: "Clothing" },
+  // ... other categories
+];
+
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -29,7 +35,7 @@ const WishlistPage = memo(() => {
   // Fetch wishlist from db.json
   const fetchWishlist = async (email) => {
     try {
-      const response = await axios.get(`http://localhost:3001/users?email=${email}`);
+      const response = await axiosInstance.get(`http://localhost:3001/users?email=${email}`);
       const userData = response.data[0];
       if (userData && userData.wishlist) {
         setWishlist(userData.wishlist);

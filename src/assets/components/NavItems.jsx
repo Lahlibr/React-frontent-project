@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import  { useState,useContext } from "react";
 import { Menu, X, Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import SearchComponent from "./Search";
+import { UserContext } from "./UserProvider";
 const NavItems = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")));
+  const { user, logout } = useContext(UserContext);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  };
+  const handleLogout = logout;
 
   return (
-    <header className="w-full fixed top-0 left-0 z-50 border-1 p-4">
+    <header className="w-full fixed left-0 z-50 border-1 p-4">
       <nav className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <img src="images/pngtree-food-logo-png-image_5687686.png" alt="Logo" className="h-8 w-8" />
+          <img src="\images\pngtree-food-logo-png-image_5687686.png" alt="Logo" className="h-8 w-8" />
           <h1 className="text-white text-xl font-bold">Foodies</h1>
         </div>
         <SearchComponent/>

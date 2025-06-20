@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
 
   // Check if token exists and is not expired (e.g., 8 hour expiry)
   const isAuthenticated = adminToken && 
-                         (new Date().getTime() - adminToken.loggedInAt) < (8 * 60 * 60 * 1000);
+      (new Date().getTime() - adminToken.loggedInAt) < (8 * 60 * 60 * 1000);
 
   useEffect(() => {
     if (!isAuthenticated && location.pathname !== "/admin-login") {

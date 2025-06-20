@@ -1,28 +1,11 @@
 import { createContext, useState, useEffect, useCallback, useMemo } from "react";
-import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
+import axiosInstance from "./AxiosInstance";
+import { normalizeProduct,normalizeImages } from "./Normalize";
 
 export const ProductContext = createContext();
 
-const normalizeProduct = (product, categoryName) => ({
-  id: product.id,
-  title: product.title || product.name || "",
-  price: Number(product.price || product.new_price || 0),
-  offerPrice: Number(product.offerPrice || product.old_price || 0),
-  images: normalizeImages(product.images || product.img),
-  description: product.description || "",
-  type: product.type || "",
-  rating: Number(product.rating || 0),
-  category: categoryName,
-  isDeleted: product.isDeleted || false // Add this line
-});
-const normalizeImages = (images) => {
-  if (Array.isArray(images)) return images;
-  if (typeof images === 'string' && images.trim()) return [images];
-  return [];
-};
 
-const API_URL = "http://localhost:3001";
 
 const ProductProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
@@ -33,7 +16,7 @@ const ProductProvider = ({ children }) => {
   const fetchCategories = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_URL}/categories`);
+      const res = await axiosInstance.get("category/All");
       
       const formattedCategories = res.data.map(cat => ({
         ...cat,
@@ -60,7 +43,7 @@ const ProductProvider = ({ children }) => {
     setLoading(true);
     try {
       // Get fresh categories data
-      const res = await axios.get(`${API_URL}/categories`);
+      const res = await axiosInstance.get(`category/All`);
       const categoriesData = res.data;
       
       // Find the target category
@@ -103,7 +86,7 @@ const ProductProvider = ({ children }) => {
       }
       
       // Update the category
-      await axios.put(`${API_URL}/categories/${targetCategory.id}`, {
+      await axiosInstance.put(`category/${targetCategory.id}`, {
         ...targetCategory,
         products: updatedProducts
       });

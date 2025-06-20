@@ -3,6 +3,7 @@ import { Card } from "../components/cart";
 import { Users, ShoppingCart, DollarSign } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import axiosInstance from "../../components/AxiosInstance";
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -15,24 +16,45 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
 
  
+const fetchData = async () => {
+  try {
+    const tokenData = JSON.parse(sessionStorage.getItem("adminToken"));
+
+    const [usersResponse, ordersResponse, categoriesResponse,ProductResponse] = await Promise.all([
+      axiosInstance.get("/User/Admin", {
+        headers: { Authorization: `Bearer ${tokenData?.token}` },
+      }),
+      axiosInstance.get("Order/Admin/Orders", {
+        headers: { Authorization: `Bearer ${tokenData?.token}` },
+      }),
+      axiosInstance.get("/Category/All", {
+        headers: { Authorization: `Bearer ${tokenData?.token}` },
+      }),
+      axiosInstance.get("/Product/All", {
+        headers: { Authorization: `Bearer ${tokenData?.token}` },
+      }),
+    ]);
+    console.log("Dashboard data fetched successfully", categoriesResponse.data);
+    setData({
+      users: usersResponse.data,
+      orders: ordersResponse.data,
+      categories: categoriesResponse.data,
+      products: ProductResponse.data,
+      
+    });
+    
+    setLoading(false);
+  } catch (err) {
+    console.error("Error fetching dashboard data", err);
+    setError(err.message || "Something went wrong while loading dashboard data.");
+    setLoading(false);
+  }
+};
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/db.json');
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const jsonData = await response.json();
-        setData(jsonData);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
+
+
 
   
   const totalUsers = data.users ? data.users.length : 0;
@@ -45,10 +67,10 @@ const AdminDashboard = () => {
   
   
   const allProducts = data.categories ? data.categories.flatMap(category => category.products || []) : [];
-  
+  console.log("All Products:", allProducts);
   
   const trendingProducts = [...allProducts].sort((a, b) => b.rating - a.rating).slice(0, 5);
-  
+  console.log("Trending Products:", trendingProducts);
   // Prepare metrics for display
   const metrics = [
     { title: "Total Users", value: totalUsers, icon: <Users size={20} />, description: "All registered accounts" },
@@ -155,21 +177,21 @@ const AdminDashboard = () => {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {trendingProducts.map((product) => (
-                      <tr key={product.id}>
+                      <tr key={product.productId}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-10 w-10">
-                              <img className="h-10 w-10 rounded-full" src={Array.isArray(product.img) ? product.img[0] : product.img} alt={product.name} />
+                              <img className="h-10 w-10 rounded-full" src={Array.isArray(product.imageUrl) ? product.imageUrl[0] : product.imageUrl} alt={product.productName} />
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                              <div className="text-sm font-medium text-gray-900">{product.productName}</div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">${product.new_price}</div>
+                          <div className="text-sm text-gray-900">${product.offerPrice}</div>
                           {product.old_price && (
-                            <div className="text-xs text-gray-500 line-through">${product.old_price}</div>
+                            <div className="text-xs text-gray-500 line-through">${product.realPrice}</div>
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">

@@ -1,17 +1,24 @@
 import React from "react";
+import { useField } from "formik";
 
-const InputField = React.memo(({ label, name, type = "text", value, onChange, error }) => (
-  <div className="mb-4">
-    <label className="block text-sm font-bold mb-2 text-white">{label}</label>
-    <input
-      name={name}
-      type={type}
-      value={value || ""}
-      onChange={onChange}
-      className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded"
-    />
-    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-  </div>
-));
+const InputField = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
+
+  return (
+    <div className="flex flex-col">
+      <label htmlFor={props.name} className="mb-1 font-medium">{label}</label>
+      <input
+        {...field}
+        {...props}
+        className={`p-2 border rounded ${
+          meta.touched && meta.error ? "border-red-500" : "border-gray-300"
+        }`}
+      />
+      {meta.touched && meta.error && (
+        <div className="text-red-500 text-sm mt-1">{meta.error}</div>
+      )}
+    </div>
+  );
+};
 
 export default InputField;
