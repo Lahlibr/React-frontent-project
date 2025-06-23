@@ -1,193 +1,150 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import Modal from "./Modal";
 import ProductTable from "../components/ProductTable";
 import Filters from "./Filters";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import ProductForm from "./ProductForm";
-import axiosInstance from "../../components/AxiosInstance";
-import { toast } from "react-toastify";
-
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-        {children}
-      </div>
-    </div>
-  );
-};
+import { ProductContext } from "../../components/ProductContext";
 
 const ProductsPage = () => {
+  const { categories, loading, error, deleteProduct, clearError } = useContext(ProductContext);
   const [originalProducts, setOriginalProducts] = useState([]);
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  
 
+  // Update products when categories change
   useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    setIsLoading(true);
-    try {
-      console.log("Fetching products...");
-      const response = await axiosInstance.get("category/All");
-      console.log("API Response:", response.data);
-      
-      const allProducts = response.data.flatMap((category) =>
-        category.products.map((product) => ({
-          id: product.productId,
-          productName: product.productName,
-          category: category.name,
-          price: product.realPrice,
-          offerPrice: product.offerPrice,
-          type: product.type,
-          rating: product.rating,
-          description: product.description,
-          images: product.imageUrl || [],
-          isDeleted: product.isDeleted || false,
-        }))
+    if (categories && categories.length > 0) {
+      const allProducts = categories.flatMap((category) =>
+        category.products
+          .filter(product => !product.isDeleted) // Filter out deleted products
+          .map((product) => ({
+            id: product.id || product.productId,
+            productName: product.productName || product.productName,
+            category: category.name,
+            price: product.new_price || product.realPrice,
+            offerPrice: product.old_price || product.offerPrice,
+            type: product?.type,
+            rating: product.rating,
+            description: product.description,
+            images: product?.img || product?.imageUrl,
+            isDeleted: product.isDeleted || false
+          }))
       );
-      
-      console.log("Processed products:", allProducts);
       setOriginalProducts(allProducts);
       setDisplayedProducts(allProducts);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      // Add user feedback
-      alert("Failed to fetch products. Please refresh the page.");
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, [categories]);
 
- const handleSearch = async (searchTerm) => {
-  if (!searchTerm) {
-    setDisplayedProducts(originalProducts);
-    return;
-  }
+  // Handle search functionality
+  const handleSearch = useCallback((searchTerm) => {
+    if (!searchTerm) {
+      setDisplayedProducts(originalProducts);
+      return;
+    }
 
-  try {
-    const response = await axiosInstance.get(`Product/Search/${searchTerm}`);
-    const filteredProducts = response.data.map((product) => ({
-      id: product.productId,
-      productName: product.productName,
-      category: product.categoryName || "Unknown", // Adjust as per your API response
-      price: product.realPrice,
-      offerPrice: product.offerPrice,
-      type: product.type,
-      rating: product.rating,
-      description: product.description,
-      images: product.imageUrl || [],
-      isDeleted: product.isDeleted || false,
-    }));
+    const lowerCaseTerm = searchTerm.toLowerCase();
+    const filtered = originalProducts.filter((product) => {
+      return (
+        (product.productName && product.productName.toLowerCase().includes(lowerCaseTerm)) ||
+        (product.category && product.category.toLowerCase().includes(lowerCaseTerm)) ||
+        (product.description && product.description.toLowerCase().includes(lowerCaseTerm))
+      );
+    });
 
-    setDisplayedProducts(filteredProducts);
-  } catch (error) {
-    console.error("Search failed:", error);
-    toast.error("No matching products found.");
-    setDisplayedProducts([]); // Optionally clear the UI
-  }
-};
+    setDisplayedProducts(filtered);
+  }, [originalProducts]);
 
-
-  const handleEdit = (product) => {
-    console.log("Editing product:", product);
+  // Handle product edit
+  const handleEdit = useCallback((product) => {
     setEditProduct(product);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const closeModal = async () => {
-    console.log("Closing modal and refreshing data...");
+  const closeModal = useCallback(() => {
     setEditProduct(null);
     setIsModalOpen(false);
-    
-    // Add a small delay to ensure server has processed the update
-    setTimeout(() => {
-      fetchProducts();
-    }, 500);
-  };
+  }, []);
 
-  const handleRemove = async (id) => {
-  try {
-    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
-    if (!confirmDelete) return;
+  // Handle product removal
+  const handleRemove = useCallback(async (id) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) {
+      return;
+    }
 
-    await axiosInstance.delete(`Product/Delete/${id}`); // Assuming baseURL is already set
+    try {
+      const success = await deleteProduct(id);
+      if (success) {
+        // Products will be automatically updated through context
+        console.log(`Product ${id} deleted successfully`);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  }, [deleteProduct]);
 
-    console.log(`Product ${id} deleted from server`);
-    toast.success("Product deleted successfully");
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen(prev => !prev);
+  }, []);
 
-    fetchProducts(); // Refresh product list
-  } catch (error) {
-    console.error("Error deleting product:", error);
-    toast.error("Failed to delete product");
-  }
-};
+  const openAddModal = useCallback(() => {
+    setEditProduct(null);
+    setIsModalOpen(true);
+  }, []);
 
+  const handleFormSuccess = useCallback(() => {
+    // Context will automatically refresh data
+    console.log("Product operation completed successfully");
+  }, []);
 
-  // Create a custom ProductForm wrapper that handles the close callback
-  const ProductFormWrapper = ({ editProduct, onClose }) => {
-    const handleFormClose = () => {
-      console.log("ProductForm closed, refreshing data...");
-      onClose();
-    };
+  // Handle error dismissal
+  const handleErrorDismiss = useCallback(() => {
+    clearError();
+  }, [clearError]);
 
+  if (loading && categories.length === 0) {
     return (
-      <ProductForm 
-        editProduct={editProduct} 
-        onClose={handleFormClose}
-      />
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <div className="text-white text-xl">Loading products...</div>
+      </div>
     );
-  };
+  }
 
   return (
     <>
-      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+      <Navbar toggleSidebar={toggleSidebar} />
       <div className="flex">
         <div
-          className={`fixed md:relative z-40 w-64 bg-gray-800 text-white md:block ${
+          className={`fixed md:relative z-50 md:z-auto w-64 bg-gray-900 text-white md:block ${
             sidebarOpen ? "translate-x-0" : "-translate-x-64"
           } transition-transform duration-300 md:translate-x-0`}
         >
-          <Sidebar
-            isOpen={sidebarOpen}
-            toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-          />
+          <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
         </div>
 
-        <div className="flex-1 min-h-screen bg-white text-black p-6">
+        <div className="flex-1 min-h-screen bg-gray-900 text-white p-6">
           <div className="max-w-6xl mx-auto">
+            {error && (
+              <div className="bg-red-600 text-white p-4 rounded mb-4 flex justify-between items-center">
+                <span>{error}</span>
+                <button 
+                  onClick={handleErrorDismiss}
+                  className="ml-2 text-red-200 hover:text-white font-bold text-lg"
+                >
+                  ×
+                </button>
+              </div>
+            )}
+
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-3xl font-semibold">Products</h1>
-              <button
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:opacity-50"
-                onClick={() => setIsModalOpen(true)}
-                disabled={isLoading}
+              <button 
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors disabled:bg-blue-400"
+                onClick={openAddModal}
+                disabled={loading}
               >
                 + Add Product
               </button>
@@ -195,23 +152,24 @@ const ProductsPage = () => {
 
             <Filters onSearch={handleSearch} />
 
-            {isLoading ? (
-              <div className="text-center py-8">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <p className="mt-2 text-gray-600">Loading products...</p>
+            {loading && (
+              <div className="text-center py-4">
+                <span className="text-gray-400">Loading...</span>
               </div>
-            ) : (
-              <ProductTable
-                products={displayedProducts.filter((p) => !p.isDeleted)}
-                handleRemove={handleRemove}
-                handleEdit={handleEdit}
-              />
             )}
 
+            <ProductTable 
+              products={displayedProducts} 
+              handleRemove={handleRemove} 
+              handleEdit={handleEdit}
+              loading={loading}
+            />
+
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-              <ProductFormWrapper
-                editProduct={editProduct}
+              <ProductForm 
+                editProduct={editProduct} 
                 onClose={closeModal}
+                onSuccess={handleFormSuccess}
               />
             </Modal>
           </div>

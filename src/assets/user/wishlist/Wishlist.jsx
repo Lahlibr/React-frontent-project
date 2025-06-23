@@ -1,7 +1,6 @@
 import React, { useState, useEffect, memo } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Heart, Trash, Menu } from "lucide-react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,31 +12,33 @@ const WishlistPage = memo(() => {
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")));
   const [wishlist, setWishlist] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
-  const categories = [
-  { name: "Electronics" },
-  { name: "Clothing" },
-  // ... other categories
-];
 
+  const categories = [
+    { name: "Electronics" },
+    { name: "Clothing" },
+    { name: "Books" },
+    { name: "Shoes" },
+    { name: "Accessories" },
+  ];
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     setUser(storedUser);
 
-    if (!storedUser) {
-      alert("Please log in to view your wishlist.");
-      navigate("/login");
+    if (storedUser) {
+      fetchWishlistFromServer(storedUser.email);
     } else {
-      fetchWishlist(storedUser.email);
+      // Guest user - load wishlist from localStorage
+      const guestWishlist = JSON.parse(localStorage.getItem("guest_wishlist")) || [];
+      setWishlist(guestWishlist);
     }
-  }, [location]); // ✅ Updates when URL changes
+  }, [location]);
 
-  // Fetch wishlist from db.json
-  const fetchWishlist = async (email) => {
+  const fetchWishlistFromServer = async (email) => {
     try {
       const response = await axiosInstance.get(`http://localhost:3001/users?email=${email}`);
       const userData = response.data[0];
-      if (userData && userData.wishlist) {
+      if (userData?.wishlist) {
         setWishlist(userData.wishlist);
       }
     } catch (error) {
@@ -45,14 +46,14 @@ const WishlistPage = memo(() => {
     }
   };
 
-  // Update wishlist in db.json
-  const updateWishlist = async (updatedWishlist) => {
+  const updateWishlistToServer = async (updatedWishlist) => {
     try {
       const { data } = await axios.get(`http://localhost:3001/users?email=${user.email}`);
       const userData = data[0];
-
       if (userData) {
-        await axios.patch(`http://localhost:3001/users/${userData.id}`, { wishlist: updatedWishlist });
+        await axios.patch(`http://localhost:3001/users/${userData.id}`, {
+          wishlist: updatedWishlist,
+        });
         setWishlist(updatedWishlist);
       }
     } catch (error) {
@@ -60,15 +61,25 @@ const WishlistPage = memo(() => {
     }
   };
 
-  // Remove item from wishlist
   const removeFromWishlist = (productId) => {
     const updatedWishlist = wishlist.filter((item) => item.id !== productId);
-    updateWishlist(updatedWishlist);
+
+    if (user) {
+      updateWishlistToServer(updatedWishlist);
+    } else {
+      localStorage.setItem("guest_wishlist", JSON.stringify(updatedWishlist));
+      setWishlist(updatedWishlist);
+    }
+
     toast.success("Item removed from wishlist!");
   };
 
-  // Move item to cart
   const moveToCart = async (product) => {
+    if (!user) {
+      toast.error("Login required to move items to cart.");
+      return;
+    }
+
     try {
       const { data } = await axios.get(`http://localhost:3001/users?email=${user.email}`);
       const userData = data[0];
@@ -76,6 +87,7 @@ const WishlistPage = memo(() => {
       if (userData) {
         const updatedCart = [...(userData.cart || []), product];
         await axios.patch(`http://localhost:3001/users/${userData.id}`, { cart: updatedCart });
+
         removeFromWishlist(product.id);
         toast.success("Item moved to cart!");
       }
@@ -93,7 +105,7 @@ const WishlistPage = memo(() => {
         <Menu size={20} /> Categories
       </button>
 
-      {/* Left Sidebar (Categories) */}
+      {/* Sidebar */}
       <aside
         className={`absolute md:relative left-0 top-16 md:top-0 bg-white p-4 shadow-lg rounded-lg md:w-1/5 transition-transform transform ${
           showSidebar ? "translate-x-0" : "-translate-x-full md:translate-x-0"
@@ -142,7 +154,9 @@ const WishlistPage = memo(() => {
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 text-lg text-center">Your wishlist is empty. Start adding your favorite items! 💕</p>
+          <p className="text-gray-500 text-lg text-center">
+            Your wishlist is empty. Start adding your favorite items! 💕
+          </p>
         )}
       </main>
 

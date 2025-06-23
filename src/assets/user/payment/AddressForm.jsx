@@ -3,13 +3,13 @@ import axiosInstance from "../../components/AxiosInstance";
 
 const AddAddressForm = ({ onSuccess, onCancel }) => {
   const [form, setForm] = useState({
-    fullName: "",
-    houseName: "",
-    landmark: "",
-    phoneNumber: "",
-    pincode: "",
-    place: "",
-    postOffice: "",
+    FullName: "",
+    HouseName: "",
+    Landmark: "",
+    PhoneNumber: "",
+    Pincode: "",
+    Place: "",
+    PostOffice: "",
   });
 
   const handleChange = (e) => {
@@ -18,38 +18,41 @@ const AddAddressForm = ({ onSuccess, onCancel }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await axiosInstance.post("/Address/Add", form, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const added = response?.data?.data;
-      if (added) {
-        onSuccess(added);
-      }
-    } catch (error) {
-      console.error("Failed to add address:", error?.response?.data || error);
-      alert("Failed to add address. Please try again.");
+  e.preventDefault();
+  try {
+    const formData = new FormData();
+    for (let key in form) {
+      formData.append(key, form[key]);
     }
-  };
+
+    const response = await axiosInstance.post("/Address/Add", formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    const added = response?.data?.data;
+    console.log("Fetched addresses:", response?.data?.data);
+    if (added) onSuccess(added);
+  } catch (error) {
+    console.error("Failed to add address:", error?.response?.data || error);
+    alert("Failed to add address. Please try again.");
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow space-y-4">
       <h2 className="text-lg font-semibold">Add New Address</h2>
-
       {[
-        { label: "Full Name", name: "fullName" },
-        { label: "House Name", name: "houseName" },
-        { label: "Landmark", name: "landmark" },
-        { label: "Phone Number", name: "phoneNumber", type: "tel" },
-        { label: "Pincode", name: "pincode", type: "number" },
-        { label: "Place", name: "place" },
-        { label: "Post Office", name: "postOffice" },
+        { label: "Full Name", name: "FullName" },
+        { label: "Phone Number", name: "PhoneNumber", type: "tel" },
+        { label: "Pincode", name: "Pincode", type: "text" },
+        { label: "House Name", name: "HouseName" },
+        { label: "Place", name: "Place" },
+        { label: "Post Office", name: "PostOffice" },
+        { label: "Landmark", name: "Landmark" },
       ].map(({ label, name, type = "text" }) => (
         <div key={name}>
           <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>

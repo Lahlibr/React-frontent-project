@@ -16,6 +16,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         { name: "Deleted Products", icon: FaPlus, path: "/admin-deletedProducts" }
       ]
     },
+    { name: "Profile", icon: FaUser, path: "/admin-Category" },
     { name: "Profile", icon: FaUser, path: "/admin-Profile" },
     { name: "Users", icon: FaUsers, path: "/admin-customers" },
     

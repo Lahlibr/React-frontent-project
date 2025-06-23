@@ -1,324 +1,278 @@
-import React, { useEffect, useState } from "react";
-import axiosInstance from "../../components/AxiosInstance";
+import { useState, useContext, useEffect, useCallback } from "react";
+import { ProductContext } from "../../components/ProductContext";
+import InputField from "../components/InputField";
+import SelectField from "../components/SelectField";
+import RadioGroup from "../components/RadioField";
 
-const ProductForm = ({ onClose, editProduct }) => {
-  const [formData, setFormData] = useState({
-    id: "",
-    productName: "",
-    category: "",
-    price: "",
-    offerPrice: "",
-    type: "",
-    rating: "",
-    description: "",
-    images: [],
-  });
+const initialFormData = {
+  title: "",
+  description: "",
+  category: "",
+  price: "",
+  offerPrice: "",
+  images: null, // Changed to handle file upload
+  type: "",
+  rating: ""
+};
+
+const ProductForm = ({ editProduct, onClose, onSuccess }) => {
+  const { addOrUpdateProduct } = useContext(ProductContext);
+  const [formData, setFormData] = useState(initialFormData);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
-  if (editProduct) {
+    if (!editProduct) {
+      setFormData(initialFormData);
+      setImagePreview(null);
+      return;
+    }
+    
     setFormData({
-      id: editProduct.id || "",
-      productName: editProduct.productName || "",
-      category: editProduct.category?.name || "", // assuming category is an object
-      price: editProduct.realPrice?.toString() || "", // map realPrice to price
+      title: editProduct.title || "",
+      description: editProduct.description || "",
+      category: editProduct.category || "",
+      price: editProduct.price?.toString() || "",
       offerPrice: editProduct.offerPrice?.toString() || "",
+      images: null, // Reset file input for edit
       type: editProduct.type || "",
       rating: editProduct.rating?.toString() || "",
-      description: editProduct.description || "",
-      images: Array.isArray(editProduct.images)
-        ? editProduct.images
-        : typeof editProduct.images === "string"
-        ? editProduct.images.split(",").map((url) => url.trim())
-        : [],
     });
-  }
-}, [editProduct]);
+    
+    // Set image preview for edit mode
+    if (editProduct.images && editProduct.images.length > 0) {
+      setImagePreview(Array.isArray(editProduct.images) ? editProduct.images[0] : editProduct.images);
+    }
+  }, [editProduct]);
 
+  const handleChange = useCallback((e) => {
+    const { name, value, type, files } = e.target;
+    
+    if (type === 'file') {
+      const file = files[0];
+      setFormData(prev => ({ ...prev, [name]: file }));
+      
+      // Create preview for image
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setImagePreview(null);
+      }
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }));
+    }
+  }, [errors]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const validate = useCallback(() => {
+    const newErrors = {};
+    
+    if (!formData.title.trim()) {
+      newErrors.title = "Product title is required";
+    }
+    
+    if (!formData.category.trim()) {
+      newErrors.category = "Category is required";
+    }
+    
+    if (!formData.price || Number(formData.price) <= 0) {
+      newErrors.price = "Valid price is required";
+    }
+    
+    if (formData.offerPrice && Number(formData.offerPrice) >= Number(formData.price)) {
+      newErrors.offerPrice = "Offer price must be less than regular price";
+    }
+    
+    if (formData.rating && (Number(formData.rating) < 0 || Number(formData.rating) > 5)) {
+      newErrors.rating = "Rating must be between 0 and 5";
+    }
+    
+    // Only require image for new products
+    if (!editProduct && !formData.images) {
+      newErrors.images = "Product image is required";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [formData, editProduct]);
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    if (isSubmitting) return;
+    
+    if (!validate() || isSubmitting) return;
 
     setIsSubmitting(true);
+
+    // Create FormData for file upload
+    const formDataToSend = new FormData();
+    
+    const productData = {
+      productName: formData.title.trim(),
+      description: formData.description.trim(),
+      realPrice: Number(formData.price),
+      offerPrice: formData.offerPrice ? Number(formData.offerPrice) : null,
+      type: formData.type,
+      rating: formData.rating ? Number(formData.rating) : 0,
+      categoryName: formData.category.trim(),
+    };
+
+    // Add product data as JSON string
+    formDataToSend.append('productDto', JSON.stringify(productData));
+    
+    // Add image file if present
+    if (formData.images) {
+      formDataToSend.append('image', formData.images);
+    }
+
     try {
-      // Use consistent endpoint - match with ProductsPage
-      const response = await axiosInstance.get("category/All");
-      const categories = response.data;
-
-      if (editProduct) {
-        // === Edit Product Flow ===
-        let categoryToUpdate = null;
-        let productIndex = -1;
-
-        for (const category of categories) {
-          productIndex = category.products.findIndex(
-            (p) => p.id === formData.id
-          );
-          if (productIndex !== -1) {
-            categoryToUpdate = category;
-            break;
-          }
-        }
-
-        if (categoryToUpdate && productIndex !== -1) {
-          const updatedCategory = {
-            ...categoryToUpdate,
-            products: categoryToUpdate.products.map((product, index) =>
-              index === productIndex
-                ? {
-                    ...product,
-                    productName: formData.productName,
-                    realPrice: parseFloat(formData.price), // Keep realPrice for API
-                    offerPrice: parseFloat(formData.offerPrice),
-                    type: formData.type,
-                    rating: parseFloat(formData.rating),
-                    description: formData.description,
-                    images: formData.images, // Keep images for API
-                  }
-                : product
-            ),
-          };
-
-          // Use consistent endpoint - match with ProductsPage handleRemove
-          await axiosInstance.put(
-            `Category/Update/${categoryToUpdate.id}`, // Fixed: was Product/Update
-            updatedCategory,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          
-          console.log("Product updated successfully");
-        }
-      } else {
-        // === Add Product Flow ===
-        const targetCategory = categories.find(
-          (c) => c.name.toLowerCase() === formData.category.toLowerCase()
-        );
-
-        const newProduct = {
-          id: Date.now(),
-          productName: formData.productName,
-          realPrice: parseFloat(formData.price),
-          offerPrice: parseFloat(formData.offerPrice),
-          type: formData.type,
-          rating: parseFloat(formData.rating),
-          description: formData.description,
-          images: formData.images,
-          isDeleted: false, // Add isDeleted field
-        };
-
-        if (targetCategory) {
-          const updatedCategory = {
-            ...targetCategory,
-            products: [...targetCategory.products, newProduct],
-          };
-
-          await axiosInstance.put(
-            `Category/Update/${targetCategory.id}`,
-            updatedCategory,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        } else {
-          // If category not found, create a new one
-          const newCategory = {
-            name: formData.category,
-            id: Date.now(),
-            products: [newProduct],
-          };
-
-          await axiosInstance.post("Category/Create", newCategory, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-        }
-      }
-
-      console.log("Operation completed successfully");
-      onClose(); // This will trigger fetchProducts() in ProductsPage
+      await addOrUpdateProduct(formDataToSend, !!editProduct, editProduct?.id);
+      onSuccess?.();
+      onClose();
     } catch (error) {
-      console.error("Failed to submit product", error);
-      // Add user feedback for errors
-      alert("Failed to save product. Please try again.");
+      console.error("Error saving product:", error);
+      setErrors({ general: "Failed to save product. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [formData, editProduct, validate, isSubmitting, addOrUpdateProduct, onSuccess, onClose]);
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">
+    <form onSubmit={handleSubmit} className="p-6 bg-gray-800 rounded-lg">
+      <h2 className="text-2xl font-bold text-white mb-6">
         {editProduct ? "Edit Product" : "Add New Product"}
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Product Name
-            </label>
-            <input
-              type="text"
-              name="productName"
-              value={formData.productName}
-              onChange={handleChange}
-              placeholder="Product Name"
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Category
-            </label>
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              placeholder="Category"
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Price
-            </label>
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="Price"
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Offer Price
-            </label>
-            <input
-              type="number"
-              name="offerPrice"
-              value={formData.offerPrice}
-              onChange={handleChange}
-              placeholder="Offer Price"
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Type
-            </label>
-            <input
-              type="text"
-              name="type"
-              value={formData.type}
-              onChange={handleChange}
-              placeholder="Type"
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          {/* Fixed Image URL field */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Image URLs
-            </label>
-            <input
-              type="text"
-              name="images"
-              placeholder="Image URL (comma-separated)"
-              value={Array.isArray(formData.images) ? formData.images.join(",") : ""}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  images: e.target.value
-                    .split(",")
-                    .map((url) => url.trim())
-                    .filter((url) => url),
-                }))
-              }
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Rating
-            </label>
-            <input
-              type="number"
-              name="rating"
-              value={formData.rating}
-              onChange={handleChange}
-              placeholder="Rating"
-              min="0"
-              max="5"
-              step="0.1"
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
+      
+      {errors.general && (
+        <div className="bg-red-600 text-white p-3 rounded mb-4">
+          {errors.general}
         </div>
+      )}
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Description
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Description"
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            rows="4"
-          ></textarea>
-        </div>
+      <InputField
+        label="Product Title"
+        name="title"
+        type="text"
+        value={formData.title}
+        onChange={handleChange}
+        error={errors.title}
+        required={true}
+      />
 
-        <div className="flex justify-end space-x-3 pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-          >
-            {isSubmitting
-              ? "Submitting..."
-              : editProduct
-              ? "Update Product"
-              : "Add Product"}
-          </button>
-        </div>
-      </form>
-    </div>
+      <InputField
+        label="Description"
+        name="description"
+        type="textarea"
+        value={formData.description}
+        onChange={handleChange}
+      />
+
+      <SelectField
+        label="Category"
+        name="category"
+        value={formData.category}
+        onChange={handleChange}
+        error={errors.category}
+        required={true}
+      />
+
+      <InputField
+        label="Price"
+        name="price"
+        type="number"
+        value={formData.price}
+        onChange={handleChange}
+        error={errors.price}
+        required={true}
+        min="0"
+        step="0.01"
+      />
+
+      <InputField
+        label="Offer Price"
+        name="offerPrice"
+        type="number"
+        value={formData.offerPrice}
+        onChange={handleChange}
+        error={errors.offerPrice}
+        min="0"
+        step="0.01"
+      />
+
+      <RadioGroup
+        label="Product Type"
+        name="type"
+        value={formData.type}
+        onChange={handleChange}
+        options={["Veg", "Non-Veg"]}
+      />
+
+      <InputField
+        label="Rating"
+        name="rating"
+        type="number"
+        value={formData.rating}
+        onChange={handleChange}
+        error={errors.rating}
+        min="0"
+        max="5"
+        step="0.1"
+      />
+
+      {/* File Upload Field */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-white mb-2">
+          Product Image {!editProduct && <span className="text-red-500">*</span>}
+        </label>
+        <input
+          type="file"
+          name="images"
+          accept="image/*"
+          onChange={handleChange}
+          className="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+        />
+        {errors.images && (
+          <p className="text-red-500 text-sm mt-1">{errors.images}</p>
+        )}
+        
+        {/* Image Preview */}
+        {imagePreview && (
+          <div className="mt-2">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="w-32 h-32 object-cover rounded border border-gray-600"
+            />
+          </div>
+        )}
+      </div>
+      
+      <div className="flex justify-end gap-3 mt-6">
+        <button 
+          type="button"
+          onClick={onClose}
+          className="px-6 py-3 bg-gray-600 hover:bg-gray-700 rounded text-white font-medium transition-colors"
+          disabled={isSubmitting}
+        >
+          Cancel
+        </button>
+        <button 
+          type="submit"
+          disabled={isSubmitting}
+          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 rounded text-white font-medium transition-colors"
+        >
+          {isSubmitting ? "Saving..." : (editProduct ? "Update Product" : "Add Product")}
+        </button>
+      </div>
+    </form>
   );
 };
 

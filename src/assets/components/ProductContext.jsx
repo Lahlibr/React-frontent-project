@@ -1,11 +1,8 @@
 import { createContext, useState, useEffect, useCallback, useMemo } from "react";
-import { v4 as uuidv4 } from 'uuid';
 import axiosInstance from "./AxiosInstance";
-import { normalizeProduct,normalizeImages } from "./Normalize";
+import { normalizeProduct, normalizeImages } from "./Normalize";
 
 export const ProductContext = createContext();
-
-
 
 const ProductProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
@@ -39,64 +36,77 @@ const ProductProvider = ({ children }) => {
   }, [fetchCategories]);
   
   // Handle adding or updating a product
-  const addOrUpdateProduct = useCallback(async (product, isEdit = false) => {
+  const addOrUpdateProduct = useCallback(async (formData, isEdit = false, productId = null) => {
     setLoading(true);
     try {
-      // Get fresh categories data
-      const res = await axiosInstance.get(`category/All`);
-      const categoriesData = res.data;
+      let response;
       
-      // Find the target category
-      const categoryIndex = categoriesData.findIndex(
-        cat => cat.name.trim().toLowerCase() === product.category.trim().toLowerCase()
-      );
-      
-      if (categoryIndex === -1) {
-        throw new Error(`Category "${product.category}" not found`);
-      }
-      
-      const targetCategory = categoriesData[categoryIndex];
-      const updatedProducts = [...targetCategory.products];
-      
-      // Format product for API
-      const formattedProduct = {
-        id: product.id || uuidv4(),
-        name: product.title,
-        description: product.description,
-        new_price: Number(product.price),
-        old_price: Number(product.offerPrice) || null,
-        img: normalizeImages(product.images),
-        type: product.type || "",
-        rating: Number(product.rating) || 0,
-        isDeleted: product.isDeleted || false // Add this line
-      };
-      
-      if (isEdit) {
+      if (isEdit && productId) {
         // Update existing product
-        const productIndex = updatedProducts.findIndex(p => p.id === product.id);
-        
-        if (productIndex === -1) {
-          throw new Error(`Product with ID ${product.id} not found`);
-        }
-        
-        updatedProducts[productIndex] = formattedProduct;
+        response = await axiosInstance.put(`/Product/Update/${productId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       } else {
-        // Add new product
-        updatedProducts.push(formattedProduct);
+        // Create new product
+        response = await axiosInstance.post('/Product/Create', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       }
       
-      // Update the category
-      await axiosInstance.put(`category/${targetCategory.id}`, {
-        ...targetCategory,
-        products: updatedProducts
-      });
+      console.log("Product saved successfully:", response.data);
       
-      // Refresh data
+      // Refresh categories data
       await fetchCategories();
       return true;
     } catch (error) {
       console.error("Error saving product:", error);
-      setError(error.message);
+      
+      // Handle different error types
+      if (error.response) {
+        // Server responded with error status
+        const errorMessage = error.response.data?.message || 
+                            error.response.data?.title || 
+                            `Server error: ${error.response.status}`;
+        setError(errorMessage);
+      } else if (error.request) {
+        // Request made but no response
+        setError("Network error. Please check your connection.");
+      } else {
+        // Something else happened
+        setError("An unexpected error occurred.");
+      }
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchCategories]);
+
+  // Handle product deletion
+  const deleteProduct = useCallback(async (productId) => {
+    setLoading(true);
+    try {
+      await axiosInstance.delete(`/Product/Delete/${productId}`);
+      
+      console.log("Product deleted successfully");
+      
+      // Refresh categories data
+      await fetchCategories();
+      return true;
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      
+      if (error.response) {
+        const errorMessage = error.response.data?.message || 
+                            error.response.data?.title || 
+                            `Server error: ${error.response.status}`;
+        setError(errorMessage);
+      } else {
+        setError("Failed to delete product. Please try again.");
+      }
       return false;
     } finally {
       setLoading(false);
@@ -109,8 +119,10 @@ const ProductProvider = ({ children }) => {
     loading,
     error,
     addOrUpdateProduct,
-    refreshCategories: fetchCategories
-  }), [categories, loading, error, addOrUpdateProduct, fetchCategories]);
+    deleteProduct,
+    refreshCategories: fetchCategories,
+    clearError: () => setError(null)
+  }), [categories, loading, error, addOrUpdateProduct, deleteProduct, fetchCategories]);
   
   return (
     <ProductContext.Provider value={contextValue}>

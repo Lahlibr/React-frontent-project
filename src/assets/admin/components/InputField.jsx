@@ -1,22 +1,54 @@
 import React from "react";
-import { useField } from "formik";
 
-const InputField = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
+const InputField = ({ 
+  label, 
+  name, 
+  type = "text", 
+  value, 
+  onChange, 
+  error, 
+  required = false,
+  min,
+  max,
+  step,
+  ...props 
+}) => {
+  const baseClasses = "w-full px-3 py-2 rounded border bg-gray-700 text-white";
+  const errorClasses = error ? "border-red-500" : "border-gray-600";
+  const focusClasses = "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
 
   return (
-    <div className="flex flex-col">
-      <label htmlFor={props.name} className="mb-1 font-medium">{label}</label>
-      <input
-        {...field}
-        {...props}
-        className={`p-2 border rounded ${
-          meta.touched && meta.error ? "border-red-500" : "border-gray-300"
-        }`}
-      />
-      {meta.touched && meta.error && (
-        <div className="text-red-500 text-sm mt-1">{meta.error}</div>
+    <div className="mb-4">
+      <label htmlFor={name} className="block text-white mb-2 font-medium">
+        {label} {required && <span className="text-red-400">*</span>}
+      </label>
+      
+      {type === "textarea" ? (
+        <textarea
+          id={name}
+          name={name}
+          value={value}
+          onChange={onChange}
+          className={`${baseClasses} ${errorClasses} ${focusClasses}`}
+          rows={3}
+          {...props}
+        />
+      ) : (
+        <input
+          id={name}
+          name={name}
+          type={type}
+          value={value}
+          onChange={onChange}
+          min={min}
+          max={max}
+          step={step}
+          className={`${baseClasses} ${errorClasses} ${focusClasses}`}
+          {...props}
+        />
       )}
+      
+      {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
     </div>
   );
 };

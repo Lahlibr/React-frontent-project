@@ -16,6 +16,7 @@ import AdminDashboard from "./assets/admin/adminHome/Section";
 import AdminProfile from "./assets/admin/adminHome/Profile";
 import OrderPage from "./assets/admin/orders/orders";
 import ProductsPage from "./assets/admin/products/ProductsPage";
+import AdminCategory from "./assets/admin/Categories/AdminCategory";
 import ProductForm from "./assets/admin/products/ProductForm";
 import DeletedProductsPage from "./assets/admin/products/DeletedProducts";
 import ProductProvider from './assets/components/ProductContext'
@@ -46,6 +47,7 @@ function App() {
           <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>}/>
           <Route path="/admin-orders" element={<ProtectedRoute><OrderPage /></ProtectedRoute>}/>
           <Route path="/admin-products" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>}/>
+          <Route path="/admin-category" element={<ProtectedRoute><AdminCategory /></ProtectedRoute>}/>
           <Route path="/admin-addProducts" element={<ProtectedRoute><ProductForm /></ProtectedRoute>}/>
           <Route path="/admin-customers" element={<ProtectedRoute><CustomerDashboard /></ProtectedRoute>}/>
           <Route path="/admin-deletedProducts" element={<ProtectedRoute><DeletedProductsPage /></ProtectedRoute>}/>
